@@ -1,5 +1,6 @@
 function BaseState() {
 	var self = this;
+	var numOfPlayers;
 	//this.state = new BaseState(self);
 	this.state = new StartState(self);
 	this.changeState = function(){
@@ -13,6 +14,15 @@ function BaseState() {
 	this.doAction = function(){
 		
 	}
+	
+	this.obtainNumberOfPlayersFromModel = function(number){		//this is shitty programming probably.
+		numOfPlayers = number;
+	}
+	
+	this.getNumOfPlayers = function(){
+		
+		return numOfPlayers;
+	}
 }
 
 //State where people log in to the game.
@@ -22,7 +32,19 @@ function StartState(container){
 	this.value = 'I am in StartState';
 	container.state = this;
 	this.next = function(){
-		return new IntroState(self.container);
+		
+		
+		console.log("1.Inside of StartState once next() is activated:" + this.container.getNumOfPlayers());	//this works
+		
+		//if the players are less than 5 it can't start into the intro stage.
+		if(this.container.getNumOfPlayers() < 5){		//TODO: add start conditional later
+			
+		}
+		else{
+			
+			return new IntroState(self.container);		//go to the next state
+		
+		}
 	
 	}
 }

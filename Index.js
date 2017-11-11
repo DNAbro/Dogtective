@@ -11,39 +11,34 @@ function GameModel(state) {
 	var playerArray = [];					//array of players?
 	var playerCount = 0;
 	console.log(state.getValue());
-
+	
+	
+	
+	
+	
 	
 	this.modelChangeState = function() {
-		state.changeState();
-		console.log(state.getValue());
+		state.obtainNumberOfPlayersFromModel(playerCount);	//update player count for so the state knows.
+		state.changeState();								//change the state
+		console.log(state.getValue());						//Log state into console.
 	}
-	//console.log(data);
+	
 	this.displayPlayer = function() {				//testing
 		this.playerArray[0].displayNumber();
 	}
 	
 	this.createPlayer = function() {					//creates the players in the game and adds it to array.
-		
-		//x = Player();
-		console.log("Creating player number:" + playerCount);
-		//playerArray[playerCount] = (Player(playerCount);		
+		console.log("Creating player number:" + playerCount);		
 		playerArray.push(new Player(playerCount));
-		//var func = Player(45);
-		//func.displayNumber();
+		playerArray[playerCount].displayNumber();
 		playerCount++;
-		
-		console.log("Array length:" + playerArray.length);
-		console.log(playerArray[0]);
-		
-		playerArray[0].displayNumber();
-		//playerArray[1].displayNumber();
-		//testing
-		//this.displayPlayer();
 	}
 	
 	
-	
-	
+	this.returnNumberOfPlayers = function() {
+		return 20;
+		//return playerArray.size;
+	}
 	
 	
 	
