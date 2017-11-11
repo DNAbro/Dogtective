@@ -9,8 +9,13 @@ function BaseState() {
 	this.getValue = function() {	//testing to get values from states
 		return self.state.value
 	}
+	
+	this.doAction = function(){
+		
+	}
 }
 
+//State where people log in to the game.
 function StartState(container){
 	var self = this;			//this is the state
 	this.container = container;
@@ -22,6 +27,7 @@ function StartState(container){
 	}
 }
 
+//Roles are assigned here.
 function IntroState(container){
 	var self = this;			//this is the state
 	this.container = container;
@@ -33,6 +39,7 @@ function IntroState(container){
 	}
 }
 
+//First choosing phase, Dogtective chooses, Pugtector chooses, Watchhound chooses.
 function ChooseState(container){
 	var self = this;			//this is the state
 	this.container = container;
@@ -44,6 +51,10 @@ function ChooseState(container){
 	}
 }
 
+//maybe need a results stage
+
+
+//Timer activates, Packleader needs to be convinced and then chooses.
 function SicState(container){
 	var self = this;			//this is the state
 	this.container = container;
@@ -52,9 +63,10 @@ function SicState(container){
 	this.next = function(){
 		return new EndState(self.container);
 	
-}
+	}
 }
 
+//Results stage showing who won.
 function EndState(container){
 	var self = this;			//this is the state
 	this.container = container;
@@ -63,5 +75,5 @@ function EndState(container){
 	this.next = function(){
 		return new IntroState(self.container);
 	
-}
+	}
 }
