@@ -8,8 +8,7 @@ var GameData = {};
 function GameModel(state) {
 	GameData.data = 'This is the model.';
 	
-	var playerArray = [];					//array of players?
-	var playerCount = 0;
+	
 	console.log(state.getValue());
 	
 	
@@ -18,31 +17,20 @@ function GameModel(state) {
 	
 	//the model tells the state to change.
 	this.modelChangeState = function() {
-		state.obtainNumberOfPlayersFromModel(playerCount);	//update player count for so the state knows.
 		state.changeState();								//change the state
-		state.getModel(this);	//testing
 		console.log(state.getValue());						//Log state into console.
 		
 	}
 	
-	
-	this.displayPlayer = function() {				//testing
-		this.playerArray[0].displayNumber();
+	this.addPlayer = function() {
+		state.createPlayer();
 	}
+	
+	
+	
 	
 	//creates a new player and adds it to the array.
-	this.createPlayer = function() {					
-		console.log("Creating player number:" + playerCount);		
-		playerArray.push(new Player(playerCount));
-		playerArray[playerCount].displayNumber();
-		playerCount++;
-	}
 	
-	//returns the current number of players.
-	this.returnNumberOfPlayers = function() {
-		return playerCount;
-		//return playerArray.size;
-	}
 	
 	
 	
@@ -67,7 +55,7 @@ function GameController(model,view){
 	
 	view.display();
 	model.modelChangeState();
-	model.createPlayer();
+	model.addPlayer();
 	//model.x.displayTest();
 	
 });

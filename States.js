@@ -1,7 +1,22 @@
 function BaseState() {
 	var self = this;
-	var numOfPlayers;
-	var mod;
+	
+	var playerArray = [];					//array of players?
+	var playerCount = 0;
+	
+	this.createPlayer = function() {					
+		console.log("Creating player number:" + playerCount);		
+		playerArray.push(new Player(playerCount));
+		playerArray[playerCount].displayNumber();
+		playerCount++;
+	}
+	
+	//returns the current number of players.
+	this.returnNumberOfPlayers = function() {
+		return playerCount;
+		//return playerArray.size;
+	}
+	
 	//this.state = new BaseState(self);
 	this.state = new StartState(self);
 	this.changeState = function(){
@@ -16,29 +31,7 @@ function BaseState() {
 		
 	}
 	
-	//grabs number of players from the model.
-	this.obtainNumberOfPlayersFromModel = function(number){		//this is shitty programming probably.
-		numOfPlayers = number;
-	}
 	
-	//gets the model to update itself locally.
-	this.getModel = function(model){	//testing
-		mod = model;
-		console.log(mod);
-		//console.log("Testing model capture:"+model.returnNumberOfPlayers());
-		console.log("Testing model capture:"+mod.returnNumberOfPlayers());
-	}
-	
-	//update the model from state.
-	this.updateModel = function(){		
-		return mod;
-	}
-	
-	//used by states to get the number of players.
-	this.getNumOfPlayers = function(){
-		
-		return numOfPlayers;
-	}
 }
 
 //State where people log in to the game.
@@ -50,10 +43,10 @@ function StartState(container){
 	this.next = function(){
 		
 		
-		console.log("1.Inside of StartState once next() is activated:" + this.container.getNumOfPlayers());	//this works
+		console.log("1.Inside of StartState once next() is activated:" + this.container.returnNumberOfPlayers());	//this works
 		
 		//if the players are less than 5 it can't start into the intro stage.
-		if(this.container.getNumOfPlayers() < 5){		//TODO: add start conditional later
+		if(this.container.returnNumberOfPlayers() < 5){		//TODO: add start conditional later
 			
 		}
 		else{
@@ -74,7 +67,6 @@ function IntroState(container){
 	this.value = 'I am in IntroState';
 	container.state = this;
 	
-	var numberOfPlayers = this.container.getNumOfPlayers();	//number of players.
 	this.next = function(){
 		return new ChooseState(self.container);
 	
