@@ -4,6 +4,12 @@ function BaseState() {
 	var playerArray = [];					//array of players?
 	var playerCount = 0;
 	
+	
+	//Functionalities
+	/////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////
+	
+	//creates the players
 	this.createPlayer = function() {					
 		console.log("Creating player number:" + playerCount);		
 		playerArray.push(new Player(playerCount));
@@ -16,6 +22,22 @@ function BaseState() {
 		return playerCount;
 		//return playerArray.size;
 	}
+	
+	this.getPlayerArrayLength = function() {
+		return playerArray.length;
+	}
+		
+	
+	this.assignRoleToPlayer = function(num,roleNum) {
+		console.log("assigning #:" + num);
+		playerArray[num].setRole(roleNum);
+		playerArray[num].displayRole();
+	}
+	
+	////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	
+	
 	
 	//this.state = new BaseState(self);
 	this.state = new StartState(self);
@@ -67,7 +89,41 @@ function IntroState(container){
 	this.value = 'I am in IntroState';
 	container.state = this;
 	
+	var numOfPlayers = this.container.returnNumberOfPlayers();
+	var randomArray = [];
 	this.next = function(){
+		
+		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+			switch(i){
+				case 0:
+				randomArray.push(1)				//Dogtective
+				break;
+				case 1:
+				randomArray.push(2);			//Pugtector
+				break;
+				case 2:
+				randomArray.push(3);			//Watchhound
+				break;
+				case 3:
+				randomArray.push(4);			//PackMember
+				break;
+				case 4:
+				randomArray.push(5);			//PackLeader
+				break;
+				case 5:							//2nd Dogtective
+				randomArray.push(1);	
+				break;
+				default:
+				randomArray.push(4);			//rest are Packmembers.
+			}
+		}
+		
+		randomArray.sort(function(a,b){return 0.5 - Math.random()});
+		
+		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+			this.container.assignRoleToPlayer(i,randomArray[i]);
+		}
+		
 		return new ChooseState(self.container);
 	
 	}
