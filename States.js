@@ -1,6 +1,7 @@
 function BaseState() {
 	var self = this;
 	var numOfPlayers;
+	var mod;
 	//this.state = new BaseState(self);
 	this.state = new StartState(self);
 	this.changeState = function(){
@@ -15,10 +16,25 @@ function BaseState() {
 		
 	}
 	
+	//grabs number of players from the model.
 	this.obtainNumberOfPlayersFromModel = function(number){		//this is shitty programming probably.
 		numOfPlayers = number;
 	}
 	
+	//gets the model to update itself locally.
+	this.getModel = function(model){	//testing
+		mod = model;
+		console.log(mod);
+		//console.log("Testing model capture:"+model.returnNumberOfPlayers());
+		console.log("Testing model capture:"+mod.returnNumberOfPlayers());
+	}
+	
+	//update the model from state.
+	this.updateModel = function(){		
+		return mod;
+	}
+	
+	//used by states to get the number of players.
 	this.getNumOfPlayers = function(){
 		
 		return numOfPlayers;
@@ -52,9 +68,13 @@ function StartState(container){
 //Roles are assigned here.
 function IntroState(container){
 	var self = this;			//this is the state
+	
+	
 	this.container = container;
 	this.value = 'I am in IntroState';
 	container.state = this;
+	
+	var numberOfPlayers = this.container.getNumOfPlayers();	//number of players.
 	this.next = function(){
 		return new ChooseState(self.container);
 	

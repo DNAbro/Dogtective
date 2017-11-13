@@ -16,27 +16,31 @@ function GameModel(state) {
 	
 	
 	
-	
+	//the model tells the state to change.
 	this.modelChangeState = function() {
 		state.obtainNumberOfPlayersFromModel(playerCount);	//update player count for so the state knows.
 		state.changeState();								//change the state
+		state.getModel(this);	//testing
 		console.log(state.getValue());						//Log state into console.
+		
 	}
+	
 	
 	this.displayPlayer = function() {				//testing
 		this.playerArray[0].displayNumber();
 	}
 	
-	this.createPlayer = function() {					//creates the players in the game and adds it to array.
+	//creates a new player and adds it to the array.
+	this.createPlayer = function() {					
 		console.log("Creating player number:" + playerCount);		
 		playerArray.push(new Player(playerCount));
 		playerArray[playerCount].displayNumber();
 		playerCount++;
 	}
 	
-	
+	//returns the current number of players.
 	this.returnNumberOfPlayers = function() {
-		return 20;
+		return playerCount;
 		//return playerArray.size;
 	}
 	
