@@ -1,5 +1,10 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/
+
+
 var state = require("./server/States.js");
 //require("./client/Index.js");
 //require('path');
@@ -31,11 +36,13 @@ app.get('/',function(req, res) {
 	
 });
 
-app.get('/bish',function(req, res){
-	console.log("I fucking did it bitch.");
+//app.get('/bish',function(req, res){
+app.post('/bish',function(req,res){
+	console.log(req.body);
 	res.status(200);
 	var myObj = {class: 'class1', id:123};
 	res.send(myObj);
+	//res.send(req.body);
 	//JSON.stringify(
 });
 //app.use('/client',express.static(_dirname+'/client'));

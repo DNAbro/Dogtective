@@ -32,7 +32,7 @@ function Controller(view){
 				console.log(this);
 			}
 		};
-	request.open('GET', 'bish', true);
+	request.open('POST', 'bish', true);
 	request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 	console.log("I did it bish is ready to go out.");
 	request.send();  // No data needs to be sent along with the 
