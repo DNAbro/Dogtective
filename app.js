@@ -26,7 +26,17 @@ app.get('/',function(req, res) {
    
    //res.send();
 	res.sendFile(__dirname + '/client/index.html');
+	//res.sendFile(__dirname + '/client/index.js');
+	//res.sendFile(__dirname + '/client/clientExample.js');
 	
+});
+
+app.get('/bish',function(req, res){
+	console.log("I fucking did it bitch.");
+	res.status(200);
+	var myObj = {class: 'class1', id:123};
+	res.send(myObj);
+	//JSON.stringify(
 });
 //app.use('/client',express.static(_dirname+'/client'));
 app.use('/client',express.static(__dirname+'/client'));

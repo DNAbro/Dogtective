@@ -140,8 +140,18 @@ function ChooseState(container){
 	this.container = container;
 	this.value = 'I am in ChooseState';
 	container.state = this;
+	
+	function timeUp(){
+		console.log("Timer is up!");
+	}
+	
+	
 	this.next = function(){
-		console.log("Moving from Choose to Sic");;
+		
+		console.log("Moving from Choose to Sic");
+		
+		console.log("Timer should now be set for 5 seconds.");
+		setTimeout(timeUp,5000);
 		return new SicState(self.container);
 	
 	}
