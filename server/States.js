@@ -1,4 +1,6 @@
-function BaseState() {
+exports.BaseState = function() {
+	
+	require("./Player.js");
 	var self = this;
 	
 	var playerArray = [];					//array of players?
@@ -31,6 +33,7 @@ function BaseState() {
 	this.assignRoleToPlayer = function(num,roleNum) {
 		console.log("assigning #:" + num);
 		playerArray[num].setRole(roleNum);
+		playerArray[num].displayNumber();
 		playerArray[num].displayRole();
 	}
 	
@@ -93,6 +96,8 @@ function IntroState(container){
 	var randomArray = [];
 	this.next = function(){
 		
+		console.log("Moving from Intro to Choose");
+		
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
 			switch(i){
 				case 0:
@@ -136,6 +141,7 @@ function ChooseState(container){
 	this.value = 'I am in ChooseState';
 	container.state = this;
 	this.next = function(){
+		console.log("Moving from Choose to Sic");;
 		return new SicState(self.container);
 	
 	}
@@ -151,6 +157,7 @@ function SicState(container){
 	this.value = 'I am in SicState';
 	container.state = this;
 	this.next = function(){
+		console.log("Sic to End");;
 		return new EndState(self.container);
 	
 	}
@@ -163,6 +170,7 @@ function EndState(container){
 	this.value = 'I am in EndState';
 	container.state = this;
 	this.next = function(){
+		console.log("Moving from End to Intro");
 		return new IntroState(self.container);
 	
 	}

@@ -1,4 +1,4 @@
-function Player(number){
+Player = function(number) {
 	
 	var playerNumber = number;
 	var playerRole;

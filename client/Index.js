@@ -1,3 +1,5 @@
+
+
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext('2d');
 
@@ -5,11 +7,12 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var GameData = {};
 
-function GameModel(state) {
+//function GameModel(state) {
+function GameModel() {
 	GameData.data = 'This is the model.';
 	
 	
-	console.log(state.getValue());
+	/*console.log(state.getValue());
 	
 	
 	
@@ -24,7 +27,7 @@ function GameModel(state) {
 	
 	this.addPlayer = function() {
 		state.createPlayer();
-	}
+	}*/
 	
 	
 	
@@ -40,7 +43,7 @@ function GameView(model){
 	this.display = function() {
 		
 		test_image = new Image();
-		test_image.src = 'assets/pawPrint.jpg'
+		test_image.src = 'client/assets/pawPrint.jpg'
 		test_image.onload = function() {
 			context.drawImage(test_image, 100, 100);
 		}
@@ -54,8 +57,8 @@ function GameController(model,view){
 	window.addEventListener('click',function(event){
 	
 	view.display();
-	model.modelChangeState();
-	model.addPlayer();
+	//model.modelChangeState();
+	//model.addPlayer();
 	//model.x.displayTest();
 	
 });
@@ -64,8 +67,10 @@ function GameController(model,view){
 
 function main() {
 	console.log('Hey');
-	var state = new BaseState();
-	var model = new GameModel(state),
+	//var state = new BaseState();
+	//$.get('/').done(function(state)){ console.log(state.playerCount);});
+	//var model = new GameModel(state),
+	var model = new GameModel(),
 	view = new GameView(model),
 	controller = new GameController(model,view);
 	
@@ -76,6 +81,8 @@ function main() {
 	console.log(state.getValue());*/
 	
 };
+
+
 
 
 main();

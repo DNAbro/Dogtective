@@ -1,0 +1,19 @@
+{
+  "name": "dogtective",
+  "version": "1.0.0",
+  "description": "game",
+  "main": "Index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DNAbro/Dogtective.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DNAbro/Dogtective/issues"
+  },
+  "homepage": "https://github.com/DNAbro/Dogtective#readme"
+}
