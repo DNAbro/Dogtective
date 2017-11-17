@@ -35,6 +35,7 @@ exports.BaseState = function() {
 		playerArray[num].setRole(roleNum);
 		playerArray[num].displayNumber();
 		playerArray[num].displayRole();
+		//playerArray[num].getRoleName();
 	}
 	
 	////////////////////////////////////////////////////////////////
@@ -144,6 +145,8 @@ function ChooseState(container){
 	function timeUp(){
 		console.log("Timer is up!");
 	}
+	
+	//Accepted votes.
 	
 	
 	this.next = function(){

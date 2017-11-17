@@ -9,22 +9,28 @@ var state = require("./server/States.js");
 //require("./client/Index.js");
 //require('path');
 var serv = require('http').Server(app);
+
+var testState = new state.BaseState();
 //__dirname = path.resolve(path.dirname(''));
 app.get('/',function(req, res) {
 	//res.sendFile(__dirname + '/client/Index.js');
 	//console.log(req);
-	var testState = new state.BaseState();
+	//var testState = new state.BaseState();
 	//var mod = model(testState);
 	
-   testState.createPlayer();
-   testState.createPlayer();
-   testState.createPlayer();
-   testState.createPlayer();
-   testState.createPlayer();
-   testState.createPlayer();
-   testState.changeState();
-   testState.changeState();
-   testState.changeState();
+	if(testState.returnNumberOfPlayers() < 15){
+		testState.createPlayer();
+	}
+	else{
+		console.log("There are already 15 players.");
+		testState.changeState();
+	}
+	
+   
+   
+   //testState.changeState();
+   //testState.changeState();
+   //testState.changeState();
    //var testText = "This was sent from the server.";
    //res.send(testText);
    
