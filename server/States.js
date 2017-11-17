@@ -5,6 +5,8 @@ exports.BaseState = function() {
 	
 	var playerArray = [];					//array of players?
 	var playerCount = 0;
+	var dogtectiveCount = 2;
+	var packCount = 0;
 	
 	
 	//Functionalities
@@ -24,6 +26,9 @@ exports.BaseState = function() {
 		return playerCount;
 		//return playerArray.size;
 	}
+	this.getDogtectiveCount = function() {
+		return dogtectiveCount;
+	}
 	
 	this.getPlayerArrayLength = function() {
 		return playerArray.length;
@@ -35,6 +40,8 @@ exports.BaseState = function() {
 		playerArray[num].setRole(roleNum);
 		playerArray[num].displayNumber();
 		playerArray[num].displayRole();
+		packCount = playerCount - 2;		//this should be fine.
+		console.log("PackCount:" + packCount);
 		//playerArray[num].getRoleName();
 	}
 	
@@ -169,9 +176,21 @@ function SicState(container){
 	this.container = container;
 	this.value = 'I am in SicState';
 	container.state = this;
+	
+	//there are two situations where the game will go into the EndState
+	//Both Dogtectives are eliminated or the Dogtectives equal or outnumber remaining players
 	this.next = function(){
-		console.log("Sic to End");;
-		return new EndState(self.container);
+		
+		if(this.container.getDogtectiveCount() >= this.container.returnNumberOfPlayers() || this.container.getDogtectiveCount() == 0){
+			console.log("Sic to End");
+			return new EndState(self.container);
+		}
+		else{
+			console.log("Sic to Choose");
+			//I should probably have a results state.
+			return new ChooseState(self.container);
+		}
+		
 	
 	}
 }

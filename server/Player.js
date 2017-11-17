@@ -4,6 +4,17 @@ Player = function(number) {
 	var playerRole;
 	var playerIsCurrentlyInGame = true;		//not eliminated.
 	
+	
+	
+	
+	this.eliminatePlayer = function(){
+		playerIsCurrentlyInGame = false;
+	}
+	
+	
+	this.getPlayerNumber = function() {
+		return playerNumber;
+	}
 	this.displayNumber = function() {
 		
 		console.log("I am player number:"+ playerNumber);
