@@ -9,14 +9,22 @@ exports.BaseState = function() {
 	var packCount = 0;
 	
 	
+	//eliminates player from game
+
 	this.eliminatePlayer = function(playerNum){
-		playerArray[playerNum].eliminatePlayer();
-		if(playerArray[playerNum].getRoleName() == "Dogtective"){
-			dogtectiveCount--;
-		}
-		else{
-			packCount--;
-		}
+		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+			if(playerArray[i].getPlayerNumber() == playerNum){
+				playerArray[i].eliminatePlayer();
+				
+				//lowers count of active players.
+				if(playerArray[playerNum].getRoleName() == "Dogtective"){
+					dogtectiveCount--;
+				}
+				else{
+					packCount--;
+				}
+			}
+		}	
 	}
 	
 	//creates the players
@@ -25,6 +33,26 @@ exports.BaseState = function() {
 		playerArray.push(new Player(playerCount));
 		playerArray[playerCount].displayNumber();
 		playerCount++;
+	}
+	
+	
+	//returns PlayerArray
+	this.getPlayerArray = function() {
+		return playerArray;
+	}
+	
+	//returns Player from Array
+	this.getPlayerFromArray = function(num) {
+		return playerArray[num];
+	}
+	
+	this.getPlayerChoice = function(num) {
+		return playerArray[num].getChoice();
+	}
+	
+	//returns playerRole, gets one specified in array, NOT playerNumber.
+	this.getPlayerRole = function(num){
+		playerArray[num].getRoleName();
 	}
 	
 	//returns the current number of players.
@@ -182,6 +210,18 @@ function SicState(container){
 	this.container = container;
 	this.value = 'I am in SicState';
 	container.state = this;
+	
+	this.findPackLeaderAndReturnChoice = function(){
+		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+			if(this.container.getPlayerRole() == "PackLeader"){
+				return this.container.getPlayerChoice();
+			}
+		}
+	}
+	
+	this.packLeaderEliminates = function(){
+		this.container.eliminatePlayer(findPackLeaderAndReturnChoice());
+	}
 	
 	//there are two situations where the game will go into the EndState
 	//Both Dogtectives are eliminated or the Dogtectives equal or outnumber remaining players

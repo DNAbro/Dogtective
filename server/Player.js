@@ -25,6 +25,10 @@ Player = function(number) {
 		playerRole.setChoiceNum(num);
 	}
 	
+	this.getChoice = function(){
+		playerRole.getChoiceNum();
+	}
+	
 	this.getRoleName = function() {
 		playerRole.getRole();
 		//console.log(playerRole);
