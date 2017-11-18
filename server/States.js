@@ -9,9 +9,15 @@ exports.BaseState = function() {
 	var packCount = 0;
 	
 	
-	//Functionalities
-	/////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////
+	this.eliminatePlayer = function(playerNum){
+		playerArray[playerNum].eliminatePlayer();
+		if(playerArray[playerNum].getRoleName() == "Dogtective"){
+			dogtectiveCount--;
+		}
+		else{
+			packCount--;
+		}
+	}
 	
 	//creates the players
 	this.createPlayer = function() {					
