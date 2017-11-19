@@ -12,12 +12,13 @@ exports.BaseState = function() {
 	//eliminates player from game
 
 	this.eliminatePlayer = function(playerNum){
+		//goes through the player Array looking for the Player Number to eliminate.
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
 			if(playerArray[i].getPlayerNumber() == playerNum){
 				playerArray[i].eliminatePlayer();
 				
 				//lowers count of active players.
-				if(playerArray[playerNum].getRoleName() == "Dogtective"){
+				if(playerArray[i].getRoleName() == "Dogtective"){
 					dogtectiveCount--;
 				}
 				else{
@@ -182,6 +183,46 @@ function ChooseState(container){
 	this.container = container;
 	this.value = 'I am in ChooseState';
 	container.state = this;
+	
+	this.dogtectiveChoices = [];
+	this.dogtectiveChoice;
+	
+	//can I return int or array?
+	this.findDogtectiveAndReturnChoice = function(){
+		if(this.container.getDogtectiveCount() == 2){
+			for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+			if(this.container.getPlayerRole() == "Dogtective"){
+					dogtectiveChoice.push(this.container.getPlayerChoice());
+				}
+			}
+			return dogtectiveChoices;
+		}
+		else{
+			for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+			if(this.container.getPlayerRole() == "Dogtective"){
+				return this.container.getPlayerChoice();
+				}
+			}
+		}
+	}
+	//finds the pugtector
+	this.findPugtectorAndReturnChoice = function(){
+		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+			if(this.container.getPlayerRole() == "Pugtector"){
+				return this.container.getPlayerChoice();
+			}
+		}
+	}
+	//finds Watchhound
+	this.findWatchhoundAndReturnChoice = function(){
+		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+			if(this.container.getPlayerRole() == "Watchhound"){
+				return this.container.getPlayerChoice();
+			}
+		}
+	}
+	
+	
 	
 	function timeUp(){
 		console.log("Timer is up!");
