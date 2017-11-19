@@ -184,8 +184,10 @@ function ChooseState(container){
 	this.value = 'I am in ChooseState';
 	container.state = this;
 	
-	this.dogtectiveChoices = [];
-	this.dogtectiveChoice;
+	var dogtectiveChoices = [];
+	var dogtectiveChoice;
+	var timeHasRanOut = false;
+	var eliminationAlreadyHappened = false;
 	
 	//can I return int or array?
 	this.findDogtectiveAndReturnChoice = function(){
@@ -222,10 +224,35 @@ function ChooseState(container){
 		}
 	}
 	
+	//Let the Watchound discover another player
+	
+	//If Pugtector and Dogtective choose the same thing, don't eliminate.
+	//If Dogtectives choose different ones, choose random.
+	this.dogtectiveEliminates = function() {
+		if(findDogtectiveAndReturnChoice() == findPugtectorAndReturnChoice()){
+			//alert that the Pugtector blocked!
+			//idk how this is going to happen.
+		}
+		else{
+			this.container.eliminatePlayer(findDogtectiveAndReturnChoice());
+			eliminationAlreadyHappened = true;
+		}
+		
+	}
 	
 	
 	function timeUp(){
-		console.log("Timer is up!");
+		//time will countdown regardless so if the choice has already been made,
+		//don't let it make timeHasRunOut true.
+		//This actually might be unecessary due to creating a new one each time, but whatev.
+		if(eliminationAlreadyHappened){
+			timeHasRanOut = false;
+			eliminationAlreadyHappened = false;
+		}
+		else{
+			timeHasRanOut = true;
+		}
+		
 	}
 	
 	//Accepted votes.
