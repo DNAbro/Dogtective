@@ -37,7 +37,9 @@ function Controller(view){
 	console.log("I did it bish is ready to go out.");
 	request.send();  // No data needs to be sent along with the 
 	
-	view.display();
+	view.displayImage('DogtectiveFinalTitle.png');
+	//view.display();
+	
 	//model.modelChangeState();
 	//model.addPlayer();
 	//model.x.displayTest();
@@ -48,15 +50,17 @@ function Controller(view){
 
 function View(){
 	
-	this.display = function() {
-		
+	this.displayImage = function(imageName){
 		test_image = new Image();
-		test_image.src = 'client/assets/pawPrint.jpg'
+		test_image.src = 'client/assets/'+imageName;
 		test_image.onload = function() {
 			context.drawImage(test_image, 100, 100);
 		}
-		console.log('I am doing the function.');
+		console.log("I should be displaying the image given " + imageName);
 	}
+	
+	
+	//displayImage('DogtectiveFinalTitle.png');
 }
 
 function main() {

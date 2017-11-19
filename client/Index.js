@@ -40,6 +40,7 @@ function GameModel() {
 }
 function GameView(model){
 	this.model = model;
+	
 	this.display = function() {
 		
 		test_image = new Image();
@@ -50,13 +51,16 @@ function GameView(model){
 		console.log('I am doing the function.');
 		console.log(GameData.data);
 	}
+	
+	displayImage('DogtectiveFinalTitle.png');
 
 }
 
 function GameController(model,view){
 	window.addEventListener('click',function(event){
 	
-	view.display();
+	//view.display();
+	view.displayImage('DogtectiveFinalTitle.png');
 	//model.modelChangeState();
 	//model.addPlayer();
 	//model.x.displayTest();
@@ -81,6 +85,12 @@ function main() {
 	console.log(state.getValue());*/
 	
 };
+//Image loads
+/*
+	client/assets/pawPrint.jpg
+	client/assets/DogtectiveFinalTitle.png
+
+*/
 
 
 
