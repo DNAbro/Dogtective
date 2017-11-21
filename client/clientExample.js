@@ -37,7 +37,7 @@ function Controller(view){
 	
 	window.addEventListener('click',function(event){
 		
-	if(mouse.x > 120 && mouse.x < 510 && mouse.y > 160 && mouse.y < 310) {	
+	if(mouse.x > view.getStartX() && mouse.x < view.getStartendX() && mouse.y > view.getStartY() && mouse.y < view.getStartendY()) {	
 		
 			request.onreadystatechange = function () {
 				var DONE = this.DONE || 4;
@@ -62,6 +62,46 @@ function Controller(view){
 }
 
 function View(){
+	
+	var sources = {
+		title: 'client/assets/DogtectiveFinalTitle.png',
+		pawPrint: 'client/assets/pawPrint.jpg',
+		start: 'client/assets/Start.png'
+	};
+	
+	startX = canvas.width/4;		//this looks right at the moment.
+	startY = canvas.height/2.5;
+	var StartendX;
+	var StartendY;
+	console.log('Canvaswidth:' + canvas.width);
+	console.log('Canvasheight:' + canvas.height);
+	
+	
+	this.getStartX = function(){
+		return startX;
+	}
+	this.getStartY = function(){
+		return startY;
+	}
+	this.getStartendX = function(){
+		return StartendX;
+	}
+	this.getStartendY = function() {
+		return StartendY;
+	}
+	
+	loadImages(sources, function(images){
+		context.drawImage(images.title, 40, 30);
+		//context.drawImage(images.pawPrint, 350, 55, 93, 104);
+		context.drawImage(images.start, startX, startY);
+		StartendX = startX + images.start.width;
+		StartendY = startY + images.start.height;
+		//console.log('Start width: ' +images.start.width);
+		//console.log('Start length: ' +images.start.height);
+		//while I'm testing left bound is 120, right is 500
+		//up is 170
+		//down is 310
+	});
 	
 	this.displayImage = function(imageName){
 		test_image = new Image();
@@ -97,34 +137,17 @@ function loadImages(sources, callback){
 function main() {
 	console.log('Testing clientExample.');
 	
-	var sources = {
-		title: 'client/assets/DogtectiveFinalTitle.png',
-		pawPrint: 'client/assets/pawPrint.jpg',
-		start: 'client/assets/Start.png'
-	};
-	startX = 100;		//shit should be calculated and updated depending on screen size
-	startY = 80;
 	
-	this.getStartX = function(){
-		return startX;
-	}
-	this.getStartY = function(){
-		return startY;
-	}
+	
+	
+
 		
 		
 	
 	view = new View(),
 	controller = new Controller(view);
 	
-	loadImages(sources, function(images){
-		context.drawImage(images.title, 40, 30);
-		//context.drawImage(images.pawPrint, 350, 55, 93, 104);
-		context.drawImage(images.start, startX, startY);
-		//while I'm testing left bound is 120, right is 500
-		//up is 170
-		//down is 310
-	});
+	
 	//view.displayImage('DogtectiveFinalTitle.png');
 	//view.displayImage('pawPrint.jpg');
 	
