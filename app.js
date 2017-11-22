@@ -43,11 +43,19 @@ app.get('/',function(req, res) {
 });
 
 //app.get('/bish',function(req, res){
-app.post('/bish',function(req,res){
+app.post('/startPressed',function(req,res){
 	console.log(req.body);
 	res.status(200);
 	var myObj = {class: 'class1', id:123};
-	res.send(myObj);
+	//res.send(myObj);
+	//start Was pressed.
+	testState.setStartWasPressed(true);
+	testState.changeState();
+	testState.changeState();
+	
+	res.send(testState.getPlayerPost());
+	
+	
 	//res.send(req.body);
 	//JSON.stringify(
 });

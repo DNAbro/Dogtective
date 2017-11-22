@@ -45,11 +45,16 @@ function Controller(view){
 					console.log(this);
 				}
 			};
-		request.open('POST', 'bish', true);
+		request.open('POST', 'startPressed', true);
 		request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 		console.log("I did it bish is ready to go out.");
 		request.send();  // No data needs to be sent along with the 
-	
+		
+		console.log('Response:' +request.response);
+		console.log('ResponseText:'+request.responseText);
+		
+		
+		
 		console.log('MouseX location:' + mouse.x);
 		console.log('MouseY location:' + mouse.y);
 		console.log('Start was pressed.');
@@ -69,7 +74,9 @@ function View(){
 		start: 'client/assets/Start.png'
 	};
 	
-	startX = canvas.width/4;		//this looks right at the moment.
+	//Lucks weird depending on size. Maybe set sizes or something.
+	
+	startX = canvas.width/4;		//this looks right at the moment. 
 	startY = canvas.height/2.5;
 	var StartendX;
 	var StartendY;
@@ -90,6 +97,7 @@ function View(){
 		return StartendY;
 	}
 	
+	//runs on load.
 	loadImages(sources, function(images){
 		context.drawImage(images.title, 40, 30);
 		//context.drawImage(images.pawPrint, 350, 55, 93, 104);

@@ -7,6 +7,8 @@ exports.BaseState = function() {
 	var playerCount = 0;
 	var dogtectiveCount = 2;
 	var packCount = 0;
+	var startWasPressed = false;
+	var playerPOST = {};
 	
 	
 	//eliminates player from game
@@ -68,6 +70,23 @@ exports.BaseState = function() {
 	this.getPlayerArrayLength = function() {
 		return playerArray.length;
 	}
+	
+	this.setStartWasPressed = function(bool){
+		startWasPressed = bool;
+		console.log("Start was pressed and alerted the model.");
+	}
+	
+	this.getStartWasPressed = function(){
+		return startWasPressed;
+	}
+	
+	this.getPlayerPost = function() {
+		return playerPOST;
+	}
+	
+	this.setPlayerPost = function(x) {
+		playerPOST = x;
+	}
 		
 	
 	this.assignRoleToPlayer = function(num,roleNum) {
@@ -114,13 +133,11 @@ function StartState(container){
 		console.log("1.Inside of StartState once next() is activated:" + this.container.returnNumberOfPlayers());	//this works
 		
 		//if the players are less than 5 it can't start into the intro stage.
-		if(this.container.returnNumberOfPlayers() < 5){		//TODO: add start conditional later
-			
+		if(this.container.returnNumberOfPlayers() > 5 && this.container.getStartWasPressed()){		//TODO: add start conditional later
+			return new IntroState(self.container);		//go to the next state
 		}
 		else{
-			
-			return new IntroState(self.container);		//go to the next state
-		
+			this.container.setStartWasPressed(false);
 		}
 	
 	}
@@ -137,6 +154,8 @@ function IntroState(container){
 	
 	var numOfPlayers = this.container.returnNumberOfPlayers();
 	var randomArray = [];
+	
+	console.log("Testing if this activates as soon as you move into the state");
 	this.next = function(){
 		
 		console.log("Moving from Intro to Choose");
@@ -171,6 +190,13 @@ function IntroState(container){
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
 			this.container.assignRoleToPlayer(i,randomArray[i]);
 		}
+		
+		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+			//console.log('Adding to Post:' + this.container.getPlayerFromArray(i).getPlayerRoleName());
+			var play1 = { playerNumber: this.container.getPlayerFromArray(i).getPlayerNumber(), playerRole: this.container.getPlayerFromArray(i).getRoleName()}; 
+		
+			this.container.getPlayerPost()[i] = play1;
+	}
 		
 		return new ChooseState(self.container);
 	

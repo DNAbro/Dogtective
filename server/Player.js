@@ -30,11 +30,17 @@ Player = function(number) {
 	}
 	
 	this.getRoleName = function() {
-		playerRole.getRole();
-		//console.log(playerRole);
+		console.log(playerRole.getRole());
+		return playerRole.getRole();
+		
+		
+		
 	}
 	this.displayRole = function() {
 		console.log(playerRole.getRole());
+	}
+	this.getRoleP = function() {
+		return playerRole;
 	}
 	
 	this.setRole = function(roleNum){
