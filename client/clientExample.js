@@ -41,8 +41,11 @@ function Controller(view){
 		
 			request.onreadystatechange = function () {
 				var DONE = this.DONE || 4;
-				if (this.readyState === DONE){
+				//if (this.readyState === DONE){
+				if (this.readyState === DONE && this.status==200){	
 					console.log(this);
+					console.log('Response:' +request.response);
+					console.log('ResponseText:'+request.responseText);
 				}
 			};
 		request.open('POST', 'startPressed', true);
