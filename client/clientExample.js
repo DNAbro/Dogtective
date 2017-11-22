@@ -39,13 +39,16 @@ function Controller(view){
 		
 	if(mouse.x > view.getStartX() && mouse.x < view.getStartendX() && mouse.y > view.getStartY() && mouse.y < view.getStartendY()) {	
 		
+			//in order to get the response, it must be in onreadystatechange.
 			request.onreadystatechange = function () {
 				var DONE = this.DONE || 4;
 				//if (this.readyState === DONE){
 				if (this.readyState === DONE && this.status==200){	
 					console.log(this);
 					console.log('Response:' +request.response);
-					console.log('ResponseText:'+request.responseText);
+					var resp = JSON.parse(request.response);
+					console.log(resp[0].playerRole);
+					
 				}
 			};
 		request.open('POST', 'startPressed', true);
