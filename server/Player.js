@@ -21,6 +21,9 @@ Player = function(number) {
 		
 	}
 	
+	this.getPlayerIsInGame = function() {
+		return playerIsCurrentlyInGame;
+	}
 	this.setChoice = function(num) {
 		playerRole.setChoiceNum(num);
 	}

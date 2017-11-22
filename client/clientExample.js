@@ -48,7 +48,8 @@ function Controller(view){
 					console.log('Response:' +request.response);
 					var resp = JSON.parse(request.response);
 					console.log(resp[0].playerRole);
-					
+					view.displayInfoScreen();
+					//TODO Now that I can get it to appear, the screen needs to change depending on who was chosen
 				}
 			};
 		request.open('POST', 'startPressed', true);
@@ -77,10 +78,15 @@ function View(){
 	var sources = {
 		title: 'client/assets/DogtectiveFinalTitle.png',
 		pawPrint: 'client/assets/pawPrint.jpg',
-		start: 'client/assets/Start.png'
+		start: 'client/assets/Start.png',
+		dogtectiveD: 'client/assets/DogtectiveDisplay.png',
+		packLeaderD: 'client/assets/PackLeaderDisplay.png',
+		packMemberD: 'client/assets/PackMemberDisplay.png',
+		pugtectorD:  'client/assets/PugtectorDisplay.png',
+		WatchhoundD: 'client/assets/WatchhoundDisplay.png'
 	};
 	
-	//Lucks weird depending on size. Maybe set sizes or something.
+		//Looks weird depending on size. Maybe set sizes or something.
 	
 	startX = canvas.width/4;		//this looks right at the moment. 
 	startY = canvas.height/2.5;
@@ -89,6 +95,52 @@ function View(){
 	console.log('Canvaswidth:' + canvas.width);
 	console.log('Canvasheight:' + canvas.height);
 	
+	this.displayImage = function(imageName,x,y,sizex,sizey){
+		test_image = new Image();
+		test_image.src = imageName;
+		test_image.onload = function() {
+			context.drawImage(test_image, x, y,sizex,sizey);
+		}
+		console.log("I should be displaying the image given " + imageName);
+	}
+	this.displayImageAndText = function(imageName,displayText){
+		img = new Image();
+		img.src = imageName;
+		img.onload = function(){
+			context.drawImage(img, startX,0, 300,300);
+			context.font = "20pt Arial";
+			context.fillText(displayText,150,150);
+		}
+	}
+	
+
+	
+	//this is going to go to the screens of phones
+	this.displayInfoScreen = function(){
+		var DogtectiveInfo = "You are the Dogtective! \nYou will decide which of the other \nplayers will go to jail.";
+		var PugtectorInfo = "You are the Pugtector! You will be able to prevent the Dogtective from sending someone to jail.";
+		var WatchhoundInfo = "You are the Watchhound! You will be able to discover who a player actually is each turn.";
+		var PackLeaderInfo = "You are the Pack Leader! All final decisions will go through you. Reveal yourself as the leader.";
+		var PackMember = "You are a Pack Member! Just a part of the pack.";
+		
+		
+		var lineHeight = 30;
+		var lines = DogtectiveInfo.split('\n');
+		
+		context.clearRect(0, 0, canvas.width, canvas.height);	//clears canvas first.
+		
+		
+		context.font = "30px Arial";
+		
+		
+		//in order for line breaks to work.
+		
+		//TODO: do this dynamically
+		this.displayImage(sources.dogtectiveD, 450, 0,300,100);
+		for(var i = 0; i<lines.length; i++){
+			context.fillText(lines[i],startX+100,100+startY+(i*lineHeight));
+		}
+	}
 	
 	this.getStartX = function(){
 		return startX;
@@ -117,14 +169,7 @@ function View(){
 		//down is 310
 	});
 	
-	this.displayImage = function(imageName){
-		test_image = new Image();
-		test_image.src = 'client/assets/'+imageName;
-		test_image.onload = function() {
-			context.drawImage(test_image, 30, 30);
-		}
-		console.log("I should be displaying the image given " + imageName);
-	}
+	
 	
 	
 	//displayImage('DogtectiveFinalTitle.png');

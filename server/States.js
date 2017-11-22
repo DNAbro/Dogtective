@@ -193,7 +193,7 @@ function IntroState(container){
 		
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
 			//console.log('Adding to Post:' + this.container.getPlayerFromArray(i).getPlayerRoleName());
-			var play1 = { playerNumber: this.container.getPlayerFromArray(i).getPlayerNumber(), playerRole: this.container.getPlayerFromArray(i).getRoleName()}; 
+			var play1 = { playerNumber: this.container.getPlayerFromArray(i).getPlayerNumber(), playerRole: this.container.getPlayerFromArray(i).getRoleName(), inGame: this.container.getPlayerFromArray(i).getPlayerIsInGame()}; 
 		
 			this.container.getPlayerPost()[i] = play1;
 	}
