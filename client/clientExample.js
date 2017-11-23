@@ -221,11 +221,7 @@ function View(){
 		context.drawImage(images.start, startX, startY);
 		StartendX = startX + images.start.width;
 		StartendY = startY + images.start.height;
-		//console.log('Start width: ' +images.start.width);
-		//console.log('Start length: ' +images.start.height);
-		//while I'm testing left bound is 120, right is 500
-		//up is 170
-		//down is 310
+		
 	});
 	
 	
