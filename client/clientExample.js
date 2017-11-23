@@ -33,11 +33,13 @@ function Controller(view){
 	xhttp.send();								//send the request to server, GET
 	//xhttp.send(string);					//POST*/
 	var request = new XMLHttpRequest();
+	var state = 'StartState';
 	
 	
 	window.addEventListener('click',function(event){
 		
-	if(mouse.x > view.getStartX() && mouse.x < view.getStartendX() && mouse.y > view.getStartY() && mouse.y < view.getStartendY()) {	
+		//only for the start portion.
+	if(mouse.x > view.getStartX() && mouse.x < view.getStartendX() && mouse.y > view.getStartY() && mouse.y < view.getStartendY() && state == 'StartState') {	
 		
 			//in order to get the response, it must be in onreadystatechange.
 			request.onreadystatechange = function () {
@@ -47,8 +49,14 @@ function Controller(view){
 					console.log(this);
 					console.log('Response:' +request.response);
 					var resp = JSON.parse(request.response);
-					console.log(resp[0].playerRole);
-					view.displayInfoScreen();
+					console.log(resp[1].playerRole);
+					//view.displayInfoScreen();
+					var count = Object.keys(resp).length;
+					console.log(count);
+					view.displayChoosingScreen(count);
+					console.log(resp[0].state);
+					state = resp[0].state;
+					console.log(state)
 					//TODO Now that I can get it to appear, the screen needs to change depending on who was chosen
 				}
 			};
@@ -68,8 +76,15 @@ function Controller(view){
 	
 	}	//if
 	
+	//choosing
+	//Note this probably will break cause choosestate is set above.
+	if(state == 'ChooseState'){
+		
+	}
+	
 	
 	});
+	
 
 }
 
@@ -77,7 +92,7 @@ function View(){
 	
 	var sources = {
 		title: 'client/assets/DogtectiveFinalTitle.png',
-		pawPrint: 'client/assets/pawPrint.jpg',
+		pawPrint: 'client/assets/pawPrint.png',
 		start: 'client/assets/Start.png',
 		dogtectiveD: 'client/assets/DogtectiveDisplay.png',
 		packLeaderD: 'client/assets/PackLeaderDisplay.png',
@@ -103,13 +118,13 @@ function View(){
 		}
 		console.log("I should be displaying the image given " + imageName);
 	}
-	this.displayImageAndText = function(imageName,displayText){
+	this.displayImageAndText = function(imageName,displayText,picX,picY,picSizeX,picSizeY,textX,textY){
 		img = new Image();
 		img.src = imageName;
 		img.onload = function(){
-			context.drawImage(img, startX,0, 300,300);
+			context.drawImage(img, picX,picY, picSizeX,picSizeY);
 			context.font = "20pt Arial";
-			context.fillText(displayText,150,150);
+			context.fillText(displayText,textX,textY);
 		}
 	}
 	
@@ -140,6 +155,50 @@ function View(){
 		for(var i = 0; i<lines.length; i++){
 			context.fillText(lines[i],startX+100,100+startY+(i*lineHeight));
 		}
+	}
+	
+	this.displayChoosingScreen = function(numOfPlayers){
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		var sizeX;
+		var sizeY;
+		var locX = 0;	//this looks fine.
+		var locY = canvas.height/6;
+		var countTo3 = 1;
+		//if 6 players
+		
+		//size of the pictures about to be loaded
+		if(numOfPlayers > 12){
+			sizeX = canvas.width/7;
+			sizeY = canvas.height/7;
+			
+		}
+		else if(numOfPlayers > 9){
+			sizeX = canvas.width/6;
+			sizeY = canvas.height/6;
+		}
+		else if(numOfPlayers > 6){
+			sizeX = canvas.width/5;
+			sizeY = canvas.height/5;
+		}
+		else{
+			sizeX = canvas.width/4;
+			sizeY = canvas.height/4;
+		}
+		
+		for(var i = 0; i<numOfPlayers; i++){
+			
+			//source image, text, image x location, y, image x size, y size, text x, text y
+			this.displayImageAndText(sources.pawPrint,i,locX+(countTo3*sizeX),locY,sizeX,sizeY,locX+sizeX/2.2+(countTo3*sizeX),locY+sizeY/1.3);
+			console.log(i);
+			countTo3++;
+			if(countTo3 == 4){
+				countTo3 = 1;
+				locY = locY + sizeY;
+			}
+			
+		}
+		
+		
 	}
 	
 	this.getStartX = function(){

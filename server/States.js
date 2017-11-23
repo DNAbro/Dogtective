@@ -125,7 +125,7 @@ exports.BaseState = function() {
 function StartState(container){
 	var self = this;			//this is the state
 	this.container = container;
-	this.value = 'I am in StartState';
+	this.value = 'StartState';
 	container.state = this;
 	this.next = function(){
 		
@@ -149,7 +149,7 @@ function IntroState(container){
 	
 	
 	this.container = container;
-	this.value = 'I am in IntroState';
+	this.value = 'IntroState';
 	container.state = this;
 	
 	var numOfPlayers = this.container.returnNumberOfPlayers();
@@ -191,12 +191,16 @@ function IntroState(container){
 			this.container.assignRoleToPlayer(i,randomArray[i]);
 		}
 		
+		//Next state cause this will call the next state immediately
+		this.container.getPlayerPost()[0] = { state: 'ChooseState'};
+		
+		
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
 			//console.log('Adding to Post:' + this.container.getPlayerFromArray(i).getPlayerRoleName());
 			var play1 = { playerNumber: this.container.getPlayerFromArray(i).getPlayerNumber(), playerRole: this.container.getPlayerFromArray(i).getRoleName(), inGame: this.container.getPlayerFromArray(i).getPlayerIsInGame()}; 
 		
-			this.container.getPlayerPost()[i] = play1;
-	}
+			this.container.getPlayerPost()[i+1] = play1;
+		}
 		
 		return new ChooseState(self.container);
 	
@@ -207,7 +211,7 @@ function IntroState(container){
 function ChooseState(container){
 	var self = this;			//this is the state
 	this.container = container;
-	this.value = 'I am in ChooseState';
+	this.value = 'ChooseState';
 	container.state = this;
 	
 	var dogtectiveChoices = [];
@@ -302,7 +306,7 @@ function ChooseState(container){
 function SicState(container){
 	var self = this;			//this is the state
 	this.container = container;
-	this.value = 'I am in SicState';
+	this.value = 'SicState';
 	container.state = this;
 	
 	this.findPackLeaderAndReturnChoice = function(){
@@ -339,7 +343,7 @@ function SicState(container){
 function EndState(container){
 	var self = this;			//this is the state
 	this.container = container;
-	this.value = 'I am in EndState';
+	this.value = 'EndState';
 	container.state = this;
 	this.next = function(){
 		console.log("Moving from End to Intro");
