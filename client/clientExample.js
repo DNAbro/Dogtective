@@ -38,6 +38,11 @@ function Controller(view){
 	
 	window.addEventListener('click',function(event){
 		
+		console.log('MouseX location:' + mouse.x);
+		console.log('MouseY location:' + mouse.y);
+		////////////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////
 		//only for the start portion.
 	if(mouse.x > view.getStartX() && mouse.x < view.getStartendX() && mouse.y > view.getStartY() && mouse.y < view.getStartendY() && state == 'StartState') {	
 		
@@ -70,19 +75,32 @@ function Controller(view){
 		
 		
 		
-		console.log('MouseX location:' + mouse.x);
-		console.log('MouseY location:' + mouse.y);
+		
 		console.log('Start was pressed.');
 	
 	}	//if
+	///////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
+	
 	
 	//choosing
 	//Note this probably will break cause choosestate is set above.
 	if(state == 'ChooseState'){
 		
+		var len = Object.keys(view.getChooseLocationsX()).length;
+		
+		
+		for(var i = 0; i < len; i++){
+			
+			if(mouse.x > view.getChooseLocationsX()[i] && mouse.x < (view.getChooseLocationsX()[i] + view.getChooseSizeX()) && mouse.y > view.getChooseLocationsY()[i] && mouse.y < (view.getChooseLocationsY()[i]+view.getChooseSizeY())){
+				console.log("I am clicking:" + i);
+			}
+				
+		}
 	}
 	
-	
+	//////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	});
 	
 
@@ -107,9 +125,25 @@ function View(){
 	startY = canvas.height/2.5;
 	var StartendX;
 	var StartendY;
+	var chooseLocationsX = {};
+	var chooseLocationsY = {};
+	var chooseSizeX = 0;
+	var chooseSizeY = 0;
 	console.log('Canvaswidth:' + canvas.width);
 	console.log('Canvasheight:' + canvas.height);
 	
+	this.getChooseLocationsX = function(){
+		return chooseLocationsX;
+	}
+	this.getChooseLocationsY = function(){
+		return chooseLocationsY;
+	}
+	this.getChooseSizeX = function(){
+		return chooseSizeX;
+	}
+	this.getChooseSizeY =function(){
+		return chooseSizeY
+	}
 	this.displayImage = function(imageName,x,y,sizex,sizey){
 		test_image = new Image();
 		test_image.src = imageName;
@@ -184,12 +218,17 @@ function View(){
 			sizeX = canvas.width/4;
 			sizeY = canvas.height/4;
 		}
-		
+		chooseSizeX = sizeX;
+		chooseSizeY = sizeY;
 		for(var i = 0; i<numOfPlayers; i++){
 			
 			//source image, text, image x location, y, image x size, y size, text x, text y
 			this.displayImageAndText(sources.pawPrint,i,locX+(countTo3*sizeX),locY,sizeX,sizeY,locX+sizeX/2.2+(countTo3*sizeX),locY+sizeY/1.3);
+			chooseLocationsX[i]= locX+(countTo3*sizeX);
+			chooseLocationsY[i] = locY;
+			
 			console.log(i);
+			console.log('ChooseLocationsX:' + chooseLocationsX[i]);
 			countTo3++;
 			if(countTo3 == 4){
 				countTo3 = 1;
