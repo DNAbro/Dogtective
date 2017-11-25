@@ -88,12 +88,36 @@ function Controller(view){
 	if(state == 'ChooseState'){
 		
 		var len = Object.keys(view.getChooseLocationsX()).length;
-		
+		var request2 = new XMLHttpRequest();
 		
 		for(var i = 0; i < len; i++){
 			
 			if(mouse.x > view.getChooseLocationsX()[i] && mouse.x < (view.getChooseLocationsX()[i] + view.getChooseSizeX()) && mouse.y > view.getChooseLocationsY()[i] && mouse.y < (view.getChooseLocationsY()[i]+view.getChooseSizeY())){
-				console.log("I am clicking:" + i);
+					console.log("I am clicking:" + i);
+				
+					//ideally each players sends their choice to the server
+					//idk how to do that on an individual basis yet so juan what the fuck
+					request2.onreadystatechange = function () {
+					var DONE = this.DONE || 4;
+					//if (this.readyState === DONE){
+					if (this.readyState === DONE && this.status==200){	
+						console.log(this);
+						console.log('Response:' +request2.response);
+						
+						}
+					};
+				request2.open('POST', 'voteWasMade', true);
+				//request2.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+				request2.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+				//request2.send({"number": "4" });
+				
+				
+				request2.send(4);
+				
+				//request2.send(js);
+				console.log("Vote Was Made.");
+				
+				
 			}
 				
 		}

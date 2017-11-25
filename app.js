@@ -59,6 +59,19 @@ app.post('/startPressed',function(req,res){
 	//res.send(req.body);
 	//JSON.stringify(
 });
+
+app.post('/voteWasMade',function(req,res){
+	console.log(req.body);
+	
+	
+	
+	console.log(Object.keys(req.body)[0]);
+	
+	//console.log(req);
+	console.log("Server response to voteWasMade");
+	res.status(200);
+	res.send("hey");
+});
 //app.use('/client',express.static(_dirname+'/client'));
 app.use('/client',express.static(__dirname+'/client'));
 serv.listen(2000);
