@@ -21,7 +21,7 @@ exports.BaseState = function() {
 
 	this.eliminatePlayer = function(playerNum){
 		//goes through the player Array looking for the Player Number to eliminate.
-		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+		for(i = 0; i <= this.getPlayerArrayLength()-1; i++){
 			if(playerArray[i].getPlayerNumber() == playerNum){
 				playerArray[i].eliminatePlayer();
 				
@@ -55,13 +55,17 @@ exports.BaseState = function() {
 		return playerArray[num];
 	}
 	
+	this.getChoiceWasMadeBool = function(num){
+		return playerArray[num].getChoiceMade();
+	}
+	
 	this.getPlayerChoice = function(num) {
 		return playerArray[num].getChoice();
 	}
 	
 	//returns playerRole, gets one specified in array, NOT playerNumber.
 	this.getPlayerRole = function(num){
-		playerArray[num].getRoleName();
+		return playerArray[num].getRoleName();
 	}
 	
 	//returns the current number of players.
@@ -229,16 +233,17 @@ function ChooseState(container){
 	this.findDogtectiveAndReturnChoice = function(){
 		if(this.container.getDogtectiveCount() == 2){
 			for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
-			if(this.container.getPlayerRole() == "Dogtective"){
-					dogtectiveChoice.push(this.container.getPlayerChoice());
+			if(this.container.getPlayerRole(i) == "Dogtective"){
+					dogtectiveChoices.push(this.container.getPlayerChoice(i));
 				}
 			}
-			return dogtectiveChoices;
+			return dogtectiveChoices[Math.round(Math.random())]
+			//return dogtectiveChoices;
 		}
 		else{
 			for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
-			if(this.container.getPlayerRole() == "Dogtective"){
-				return this.container.getPlayerChoice();
+			if(this.container.getPlayerRole(i) == "Dogtective"){
+				return this.container.getPlayerChoice(i);
 				}
 			}
 		}
@@ -246,16 +251,16 @@ function ChooseState(container){
 	//finds the pugtector
 	this.findPugtectorAndReturnChoice = function(){
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
-			if(this.container.getPlayerRole() == "Pugtector"){
-				return this.container.getPlayerChoice();
+			if(this.container.getPlayerRole(i) == "Pugtector"){
+				return this.container.getPlayerChoice(i);
 			}
 		}
 	}
 	//finds Watchhound
 	this.findWatchhoundAndReturnChoice = function(){
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
-			if(this.container.getPlayerRole() == "Watchhound"){
-				return this.container.getPlayerChoice();
+			if(this.container.getPlayerRole(i) == "Watchhound"){
+				return this.container.getPlayerChoice(i);
 			}
 		}
 	}
@@ -265,12 +270,14 @@ function ChooseState(container){
 	//If Pugtector and Dogtective choose the same thing, don't eliminate.
 	//If Dogtectives choose different ones, choose random.
 	this.dogtectiveEliminates = function() {
-		if(findDogtectiveAndReturnChoice() == findPugtectorAndReturnChoice()){
+		if(this.findDogtectiveAndReturnChoice() == this.findPugtectorAndReturnChoice()){
 			//alert that the Pugtector blocked!
+			console.log("Pugtector blocked the Dogtective!");
 			//idk how this is going to happen.
+			eliminationAlreadyHappened = true;
 		}
 		else{
-			this.container.eliminatePlayer(findDogtectiveAndReturnChoice());
+			this.container.eliminatePlayer(this.findDogtectiveAndReturnChoice());
 			eliminationAlreadyHappened = true;
 		}
 		
@@ -291,16 +298,53 @@ function ChooseState(container){
 		
 	}
 	
+	this.tallyVotes = function(){
+		var allVoted = false;
+		var count = 0;
+		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+			if(this.container.getChoiceWasMadeBool(i) == true){
+				console.log('Player ' + i + ' voted or cant vote.');
+				count++;
+			}
+			else{
+				console.log('Player ' + i + ' didnt vote');
+			}
+		}
+		if(count == i){
+			allVoted = true;
+		}
+		else{
+			allVoted = false;
+		}
+		
+		return allVoted;
+	}
+	
 	//Accepted votes.
 	
 	
 	this.next = function(){
 		
-		console.log("Moving from Choose to Sic");
+		//check if votes happened.
+		if(this.tallyVotes()){
+			//eliminate player
+			console.log('All votes accounted for.');
+			this.dogtectiveEliminates();
+			//need to alert Watchhound to other players status.
+		}
+		else{
+			console.log('Not all votes accounted for');
+		}
 		
-		console.log("Timer should now be set for 5 seconds.");
-		setTimeout(timeUp,5000);
-		return new SicState(self.container);
+		
+		
+		//console.log("Timer should now be set for 30 seconds.");
+		//setTimeout(timeUp,30000);
+		//test timer later.
+		if(eliminationAlreadyHappened){
+			console.log("Moving from Choose to Sic");
+			return new SicState(self.container);
+		}
 	
 	}
 }

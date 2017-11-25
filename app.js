@@ -11,14 +11,12 @@ var state = require("./server/States.js");
 var serv = require('http').Server(app);
 
 var testState = new state.BaseState();
+testState.changeState();
 //__dirname = path.resolve(path.dirname(''));
 app.get('/',function(req, res) {
-	//res.sendFile(__dirname + '/client/Index.js');
-	//console.log(req);
-	//var testState = new state.BaseState();
-	//var mod = model(testState);
 	
-	if(testState.returnNumberOfPlayers() < 15){
+	
+	if(testState.returnNumberOfPlayers() < 15 && testState.getValue() == "StartState"){
 		testState.createPlayer();
 	}
 	else{
@@ -28,14 +26,8 @@ app.get('/',function(req, res) {
 	
    
    
-   //testState.changeState();
-   //testState.changeState();
-   //testState.changeState();
-   //var testText = "This was sent from the server.";
-   //res.send(testText);
    
    
-   //res.send();
 	res.sendFile(__dirname + '/client/index.html');
 	//res.sendFile(__dirname + '/client/index.js');
 	//res.sendFile(__dirname + '/client/clientExample.js');
@@ -50,7 +42,7 @@ app.post('/startPressed',function(req,res){
 	//res.send(myObj);
 	//start Was pressed.
 	testState.setStartWasPressed(true);
-	testState.changeState();
+	//testState.changeState();
 	testState.changeState();
 	
 	res.send(testState.getPlayerPost());
@@ -76,6 +68,7 @@ app.post('/voteWasMade',function(req,res){
 	console.log("Server response to voteWasMade");
 	res.status(200);
 	res.send("hey");
+	testState.changeState();
 });
 //app.use('/client',express.static(_dirname+'/client'));
 app.use('/client',express.static(__dirname+'/client'));

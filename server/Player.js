@@ -9,6 +9,7 @@ Player = function(number) {
 	
 	this.eliminatePlayer = function(){
 		playerIsCurrentlyInGame = false;
+		console.log('Player number ' + playerNumber + ' has been eliminated.');
 	}
 	
 	
@@ -27,12 +28,19 @@ Player = function(number) {
 	this.setChoice = function(num) {
 		console.log("Player number " + playerNumber + " is voting for " + num);
 		playerRole.setChoiceNum(num);
+		playerRole.setChoiceMade(true);
 	}
 	
 	this.getChoice = function(){
-		playerRole.getChoiceNum();
+		return playerRole.getChoiceNum();
+	}
+	this.getChoiceMade = function(){
+		return playerRole.getChoiceMade();
 	}
 	
+	this.getPackLeaderChoice = function(){
+		return playerRole.getPackLeaderChoice();
+	}
 	this.getRoleName = function() {
 		console.log(playerRole.getRole());
 		return playerRole.getRole();
@@ -85,7 +93,13 @@ function DogtectiveRole(){
 		return roleText;
 	}
 	var choiceNum;			//an int of what the dogtective has chosen.
-	
+	var choiceMade = false;
+	this.setChoiceMade = function(bool){
+		choiceMade = bool;
+	}
+	this.getChoiceMade = function(){
+		return choiceMade;
+	}
 	this.setChoiceNum = function(num){
 		choiceNum = num;
 	}
@@ -107,6 +121,13 @@ function PugtectorRole(){
 		return roleText;
 	}
 	var choiceNum;			//an int of what the dogtective has chosen.
+	var choiceMade = false;
+	this.setChoiceMade = function(bool){
+		choiceMade = bool;
+	}
+	this.getChoiceMade = function(){
+		return choiceMade;
+	}
 	this.setChoiceNum = function(num){
 		choiceNum = num;
 	}
@@ -128,6 +149,13 @@ function WatchhoundRole(){
 		return roleText;
 	}
 	var choiceNum;			//an int of what the dogtective has chosen.
+	var choiceMade = false;
+	this.setChoiceMade = function(bool){
+		choiceMade = bool;
+	}
+	this.getChoiceMade = function(){
+		return choiceMade;
+	}
 	this.setChoiceNum = function(num){
 		choiceNum = num;
 	}
@@ -149,6 +177,16 @@ function PackLeaderRole(){
 		return roleText;
 	}
 	var choiceNum;			//Player number of the one packLeader chooses in
+	var choiceMade = true;
+	
+	var packLeaderChoice = false;
+	
+	this.setChoiceMade = function(bool){
+		choiceMade = bool;
+	}
+	this.getChoiceMade = function(){
+		return choiceMade;
+	}
 	this.setChoiceNum = function(num){
 		choiceNum = num;
 	}
@@ -157,6 +195,10 @@ function PackLeaderRole(){
 	}
 	this.displayTest = function(){
 		console.log(displayText);
+	}
+	
+	this.setPackLeaderChoice = function(bool){
+		packLeaderChoice = bool;
 	}
 	
 }
@@ -171,7 +213,15 @@ function PackMemberRole(){
 		return roleText;
 	}
 	//unused
-	var choiceNum;			//Player number of the one packLeader chooses in
+	var choiceNum;			
+	var choiceMade = true;
+	
+	this.setChoiceMade = function(bool){
+		choiceMade = bool;
+	}
+	this.getChoiceMade = function(){
+		return choiceMade;
+	}
 	this.setChoiceNum = function(num){
 		choiceNum = num;
 	}
