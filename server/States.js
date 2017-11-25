@@ -11,6 +11,12 @@ exports.BaseState = function() {
 	var playerPOST = {};
 	
 	
+	//assign vote
+	this.assignVote = function(playerNum,voteNum){
+		playerArray[playerNum].setChoice(voteNum);
+	}
+	
+	
 	//eliminates player from game
 
 	this.eliminatePlayer = function(playerNum){

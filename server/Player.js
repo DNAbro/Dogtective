@@ -25,6 +25,7 @@ Player = function(number) {
 		return playerIsCurrentlyInGame;
 	}
 	this.setChoice = function(num) {
+		console.log("Player number " + playerNumber + " is voting for " + num);
 		playerRole.setChoiceNum(num);
 	}
 	

@@ -64,8 +64,13 @@ app.post('/voteWasMade',function(req,res){
 	console.log(req.body);
 	
 	
-	
+	//this grabs the message, tbh there is probably a much better way to get this.
+	var j = JSON.parse(Object.keys(req.body)[0]);
 	console.log(Object.keys(req.body)[0]);
+	console.log(j.player)
+	console.log(j.vote);
+	///
+	testState.assignVote(j.player,j.vote);
 	
 	//console.log(req);
 	console.log("Server response to voteWasMade");

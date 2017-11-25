@@ -111,8 +111,10 @@ function Controller(view){
 				request2.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 				//request2.send({"number": "4" });
 				
+				var vote = { 'player' : 2, 'vote' : i};
+				//request2.send(i);
+				request2.send(JSON.stringify(vote));
 				
-				request2.send(4);
 				
 				//request2.send(js);
 				console.log("Vote Was Made.");
