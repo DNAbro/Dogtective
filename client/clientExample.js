@@ -58,7 +58,15 @@ function Controller(view){
 					//view.displayInfoScreen();
 					var count = Object.keys(resp).length-1;
 					console.log(count);
-					view.displayChoosingScreen(count);
+					//need to send array of ingame or out.
+					var inOrOut = {};
+					for(var i = 0; i < count; i++){
+						inOrOut[i] = resp[i+1].inGame;
+						console.log(inOrOut[i]);
+					}
+					
+					
+					view.displayChoosingScreen(count,inOrOut);
 					console.log(resp[0].state);
 					state = resp[0].state;
 					console.log(state)
@@ -86,6 +94,34 @@ function Controller(view){
 		//just click to continue to the next screen.
 		state = "SicState";
 		console.log("Moving to SicState.");
+		var request3 = new XMLHttpRequest();
+		request3.onreadystatechange = function () {
+					var DONE = this.DONE || 4;
+					//if (this.readyState === DONE){
+					if (this.readyState === DONE && this.status==200){	
+						console.log(this);
+						console.log('Response:' +request3.response);
+						var resp2 = JSON.parse(request3.response);
+						//console.log(resp2.Player);	//this works
+						var count = Object.keys(resp2).length-1;
+						console.log(count);
+						//need to send array of ingame or out.
+						var inOrOut3 = {};
+						for(var i = 0; i < count; i++){
+							inOrOut3[i] = resp2[i+1].inGame;
+							console.log(inOrOut3[i]);
+						}
+					
+					
+					view.displayChoosingScreen(count,inOrOut3);
+					
+					}
+				};
+				
+				request3.open('POST', 'results', true);
+				request3.send();
+		
+		//note need to grab the most recent update from server on who is eliminated.
 	}
 	////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
@@ -124,7 +160,7 @@ function Controller(view){
 				request2.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 				//request2.send({"number": "4" });
 				
-				var vote = { 'player' : 1,'vote' : i};
+				var vote = { 'player' : 4,'vote' : i};
 				//request2.send(i);
 				request2.send(JSON.stringify(vote));
 				
@@ -136,6 +172,12 @@ function Controller(view){
 			}
 				
 		}
+	}
+	
+	///////////////////////////////////////////////////////////////////////
+	if(state == "SicState"){
+		
+		console.log("lmao");
 	}
 	
 	
@@ -202,7 +244,9 @@ function View(){
 			context.font = "20pt Arial";
 			context.fillText(displayText,textX,textY);
 		}
+		
 	}
+	
 	
 
 	
@@ -243,7 +287,7 @@ function View(){
 		
 	}
 	
-	this.displayChoosingScreen = function(numOfPlayers){
+	this.displayChoosingScreen = function(numOfPlayers, inGameStatus){
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		var sizeX;
 		var sizeY;
@@ -273,9 +317,26 @@ function View(){
 		chooseSizeX = sizeX;
 		chooseSizeY = sizeY;
 		for(var i = 0; i<numOfPlayers; i++){
-			
+			console.log('Player ' + i + ' is in: ' + inGameStatus[i]);
+
 			//source image, text, image x location, y, image x size, y size, text x, text y
-			this.displayImageAndText(sources.pawPrint,i,locX+(countTo3*sizeX),locY,sizeX,sizeY,locX+sizeX/2.2+(countTo3*sizeX),locY+sizeY/1.3);
+			if(inGameStatus[i] == true){
+				console.log("I am in true and : "+ inGameStatus[i]);
+				this.displayImageAndText(sources.pawPrint,i,locX+(countTo3*sizeX),locY,sizeX,sizeY,locX+sizeX/2.2+(countTo3*sizeX),locY+sizeY/1.3);
+			}
+			if(inGameStatus[i] == false){
+				console.log("I get in here.");
+				//so it can't draw these two images at the same time? is it cause the onload thing?
+				//this.displayImageAndText(sources.eliminated,i,locX+(countTo3*sizeX),locY,sizeX,sizeY,locX+sizeX/2.2+(countTo3*sizeX),locY+sizeY/1.3);
+			}
+
+			
+
+			/*else{
+				console.log("I get in here.");
+				this.displayImageAndText(sources.eliminated,i,locX+(countTo3*sizeX),locY,sizeX,sizeY,locX+sizeX/2.2+(countTo3*sizeX),locY+sizeY/1.3);
+			}*/
+			
 			chooseLocationsX[i]= locX+(countTo3*sizeX);
 			chooseLocationsY[i] = locY;
 			
@@ -291,6 +352,8 @@ function View(){
 		
 		
 	}
+	
+	
 	
 	this.getStartX = function(){
 		return startX;

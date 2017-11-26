@@ -71,6 +71,24 @@ app.post('/voteWasMade',function(req,res){
 	testState.changeState();
 	res.send(testState.getEliminatePost());
 });
+
+app.post('/results',function(req,res){
+	console.log(req.body);
+	
+	var updatePost = {};
+	updatePost[0] = { state: 'ChooseState'};
+		
+		
+		for(i = 0; i <= testState.getPlayerArrayLength()-1; i++){
+			//console.log('Adding to Post:' + this.container.getPlayerFromArray(i).getPlayerRoleName());
+			var play1 = { playerNumber: testState.getPlayerFromArray(i).getPlayerNumber(), playerRole: testState.getPlayerFromArray(i).getRoleName(), inGame: testState.getPlayerFromArray(i).getPlayerIsInGame()}; 
+		
+			updatePost[i+1] = play1;
+		}
+	
+	res.status(200);
+	res.send(updatePost);
+});
 //app.use('/client',express.static(_dirname+'/client'));
 app.use('/client',express.static(__dirname+'/client'));
 serv.listen(2000);
