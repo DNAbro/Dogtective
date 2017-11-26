@@ -81,8 +81,14 @@ function Controller(view){
 	}	//if
 	///////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
-	
-	
+	if(state == "ResultsState"){
+		//all this is a screen that displays the results.
+		//just click to continue to the next screen.
+		state = "SicState";
+		console.log("Moving to SicState.");
+	}
+	////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////
 	//choosing
 	//Note this probably will break cause choosestate is set above.
 	if(state == 'ChooseState'){
@@ -105,9 +111,12 @@ function Controller(view){
 						console.log('Response:' +request2.response);
 						var resp = JSON.parse(request2.response);
 						console.log(resp.Player);	//this works
-						view.displayResultsScreen(resp.Player);
-						//Okay now I should make the next screen show who got eliminated
-						
+						if(resp.Player != undefined){
+							view.displayResultsScreen(resp.Player);
+							//Okay now I should make the next screen show who got eliminated
+							//Results now it's own state, no need to alert server for data.
+							state = "ResultsState";
+							}
 						}
 					};
 				request2.open('POST', 'voteWasMade', true);
@@ -115,7 +124,7 @@ function Controller(view){
 				request2.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 				//request2.send({"number": "4" });
 				
-				var vote = { 'player' : 4,'vote' : i};
+				var vote = { 'player' : 1,'vote' : i};
 				//request2.send(i);
 				request2.send(JSON.stringify(vote));
 				
@@ -128,6 +137,8 @@ function Controller(view){
 				
 		}
 	}
+	
+	
 	
 	//////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
@@ -146,7 +157,8 @@ function View(){
 		packLeaderD: 'client/assets/PackLeaderDisplay.png',
 		packMemberD: 'client/assets/PackMemberDisplay.png',
 		pugtectorD:  'client/assets/PugtectorDisplay.png',
-		WatchhoundD: 'client/assets/WatchhoundDisplay.png'
+		WatchhoundD: 'client/assets/WatchhoundDisplay.png',
+		eliminated: 'client/assets/pawPrintEliminated.png'
 	};
 	
 		//Looks weird depending on size. Maybe set sizes or something.
