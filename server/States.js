@@ -9,6 +9,7 @@ exports.BaseState = function() {
 	var packCount = 0;
 	var startWasPressed = false;
 	var playerPOST = {};
+	var playerEliminatedPOST = {};
 	
 	
 	//assign vote
@@ -96,6 +97,13 @@ exports.BaseState = function() {
 	
 	this.setPlayerPost = function(x) {
 		playerPOST = x;
+	}
+	
+	this.setElimiantePost = function(x){
+		playerEliminatedPOST = x;
+	}
+	this.getEliminatePost = function(){
+		return playerEliminatedPOST;
 	}
 		
 	
@@ -237,7 +245,8 @@ function ChooseState(container){
 					dogtectiveChoices.push(this.container.getPlayerChoice(i));
 				}
 			}
-			return dogtectiveChoices[Math.round(Math.random())]
+			
+			return dogtectiveChoices[Math.round(Math.random())];
 			//return dogtectiveChoices;
 		}
 		else{
@@ -270,15 +279,19 @@ function ChooseState(container){
 	//If Pugtector and Dogtective choose the same thing, don't eliminate.
 	//If Dogtectives choose different ones, choose random.
 	this.dogtectiveEliminates = function() {
-		if(this.findDogtectiveAndReturnChoice() == this.findPugtectorAndReturnChoice()){
+		
+		var dogChoice = this.findDogtectiveAndReturnChoice();
+		if(dogChoice == this.findPugtectorAndReturnChoice()){
 			//alert that the Pugtector blocked!
 			console.log("Pugtector blocked the Dogtective!");
-			//idk how this is going to happen.
+			
+			this.container.setElimiantePost({Player: pug});
 			eliminationAlreadyHappened = true;
 		}
 		else{
-			this.container.eliminatePlayer(this.findDogtectiveAndReturnChoice());
+			this.container.eliminatePlayer(dogChoice);
 			eliminationAlreadyHappened = true;
+			this.container.setElimiantePost({Player: dogChoice})
 		}
 		
 	}
@@ -330,6 +343,7 @@ function ChooseState(container){
 			//eliminate player
 			console.log('All votes accounted for.');
 			this.dogtectiveEliminates();
+			
 			//need to alert Watchhound to other players status.
 		}
 		else{
@@ -361,14 +375,14 @@ function SicState(container){
 	
 	this.findPackLeaderAndReturnChoice = function(){
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
-			if(this.container.getPlayerRole() == "PackLeader"){
+			if(this.container.getPlayerRole(i) == "PackLeader"){
 				return this.container.getPlayerChoice();
 			}
 		}
 	}
 	
 	this.packLeaderEliminates = function(){
-		this.container.eliminatePlayer(findPackLeaderAndReturnChoice());
+		this.container.eliminatePlayer(this.findPackLeaderAndReturnChoice());
 	}
 	
 	//there are two situations where the game will go into the EndState

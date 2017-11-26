@@ -67,8 +67,9 @@ app.post('/voteWasMade',function(req,res){
 	//console.log(req);
 	console.log("Server response to voteWasMade");
 	res.status(200);
-	res.send("hey");
+	
 	testState.changeState();
+	res.send(testState.getEliminatePost());
 });
 //app.use('/client',express.static(_dirname+'/client'));
 app.use('/client',express.static(__dirname+'/client'));
