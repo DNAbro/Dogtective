@@ -103,6 +103,10 @@ function Controller(view){
 					if (this.readyState === DONE && this.status==200){	
 						console.log(this);
 						console.log('Response:' +request2.response);
+						var resp = JSON.parse(request2.response);
+						console.log(resp.Player);	//this works
+						view.displayResultsScreen(resp.Player);
+						//Okay now I should make the next screen show who got eliminated
 						
 						}
 					};
@@ -215,6 +219,16 @@ function View(){
 		for(var i = 0; i<lines.length; i++){
 			context.fillText(lines[i],startX+100,100+startY+(i*lineHeight));
 		}
+	}
+	
+	this.displayResultsScreen = function(theyGone){
+		var tex = "Player #" + theyGone + " has been eliminated!";
+		context.clearRect(0, 0, canvas.width, canvas.height);	//clears canvas first.
+		context.fillText(tex, startX, startY);
+		
+		//note I can just create a state here, it doesn't have to go to the server.
+		
+		
 	}
 	
 	this.displayChoosingScreen = function(numOfPlayers){
