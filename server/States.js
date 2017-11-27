@@ -64,6 +64,15 @@ exports.BaseState = function() {
 		return playerArray[num].getChoice();
 	}
 	
+	//
+	this.getPLChoice = function(num){
+		return playerArray[num].getPackLeaderChoice();
+	}
+	
+	this.setPLChoice = function(playerNum,num){
+		playerArray[playerNum].setPLChoice(num);
+	}
+	
 	//returns playerRole, gets one specified in array, NOT playerNumber.
 	this.getPlayerRole = function(num){
 		return playerArray[num].getRoleName();
@@ -373,33 +382,39 @@ function SicState(container){
 	this.value = 'SicState';
 	container.state = this;
 	
+	var sicEm = false;
+	
 	this.findPackLeaderAndReturnChoice = function(){
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
 			if(this.container.getPlayerRole(i) == "PackLeader"){
-				return this.container.getPlayerChoice();
+				return this.container.getPLChoice(i);
 			}
 		}
 	}
 	
 	this.packLeaderEliminates = function(){
 		this.container.eliminatePlayer(this.findPackLeaderAndReturnChoice());
+		sicEm = true;
 	}
 	
 	//there are two situations where the game will go into the EndState
 	//Both Dogtectives are eliminated or the Dogtectives equal or outnumber remaining players
 	this.next = function(){
 		
-		if(this.container.getDogtectiveCount() >= this.container.returnNumberOfPlayers() || this.container.getDogtectiveCount() == 0){
-			console.log("Sic to End");
-			return new EndState(self.container);
-		}
-		else{
-			console.log("Sic to Choose");
-			//I should probably have a results state.
-			return new ChooseState(self.container);
-		}
+		this.packLeaderEliminates();
 		
-	
+		if(sicEm){
+			if(this.container.getDogtectiveCount() >= this.container.returnNumberOfPlayers() || this.container.getDogtectiveCount() == 0){
+				console.log("Sic to End");
+				return new EndState(self.container);
+			}
+			else{
+				console.log("Sic to Choose");
+				//I should probably have a results state.
+				return new ChooseState(self.container);
+			}
+		
+		}
 	}
 }
 
@@ -409,6 +424,7 @@ function EndState(container){
 	this.container = container;
 	this.value = 'EndState';
 	container.state = this;
+	console.log("HOLY SHIT WE FINISHED A GAME MY FUCKING GOD.");
 	this.next = function(){
 		console.log("Moving from End to Intro");
 		return new IntroState(self.container);

@@ -21,7 +21,7 @@ app.get('/',function(req, res) {
 	}
 	else{
 		console.log("There are already 15 players.");
-		testState.changeState();
+		//testState.changeState();
 	}
 	
    
@@ -88,6 +88,43 @@ app.post('/results',function(req,res){
 	
 	res.status(200);
 	res.send(updatePost);
+});
+
+app.post('/sicEm',function(req,res){
+	console.log(req.body);
+	//
+	var j = JSON.parse(Object.keys(req.body)[0]);
+	var plNumber;
+	console.log(Object.keys(req.body)[0]);
+	console.log(j.vote);
+	///
+	
+		for(i = 0; i <= testState.getPlayerArrayLength()-1; i++){
+			if(testState.getPlayerRole(i) == "PackLeader"){
+				plNumber = i;
+			}
+		}
+	
+	
+	
+	testState.setPLChoice(plNumber,j.vote);
+	testState.changeState();
+	
+	var updatePost2 = {};
+	updatePost2[0] = { state: 'ChooseState'};
+		
+		
+		for(i = 0; i <= testState.getPlayerArrayLength()-1; i++){
+			//console.log('Adding to Post:' + this.container.getPlayerFromArray(i).getPlayerRoleName());
+			var play1 = { playerNumber: testState.getPlayerFromArray(i).getPlayerNumber(), playerRole: testState.getPlayerFromArray(i).getRoleName(), inGame: testState.getPlayerFromArray(i).getPlayerIsInGame()}; 
+		
+			updatePost2[i+1] = play1;
+		}
+	
+	res.status(200);
+	
+	//need to send who was eliminated right?
+	res.send(updatePost2);
 });
 //app.use('/client',express.static(_dirname+'/client'));
 app.use('/client',express.static(__dirname+'/client'));

@@ -41,6 +41,10 @@ Player = function(number) {
 	this.getPackLeaderChoice = function(){
 		return playerRole.getPackLeaderChoice();
 	}
+	
+	this.setPLChoice = function(num){
+		return playerRole.setPackLeaderChoice();
+	}
 	this.getRoleName = function() {
 		console.log(playerRole.getRole());
 		return playerRole.getRole();
@@ -199,6 +203,9 @@ function PackLeaderRole(){
 	
 	this.setPackLeaderChoice = function(bool){
 		packLeaderChoice = bool;
+	}
+	this.getPackLeaderChoice = function(){
+		return packLeaderChoice;
 	}
 	
 }

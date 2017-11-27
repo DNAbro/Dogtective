@@ -177,9 +177,44 @@ function Controller(view){
 	///////////////////////////////////////////////////////////////////////
 	if(state == "SicState"){
 		
-		console.log("lmao");
+		console.log("I am here in the client side sic state");
+		var len2 = Object.keys(view.getChooseLocationsX()).length;
+		var request4 = new XMLHttpRequest();
+		
+		for(var k = 0; k < len2; k++){
+		
+		if(mouse.x > view.getChooseLocationsX()[k] && mouse.x < (view.getChooseLocationsX()[k] + view.getChooseSizeX()) && mouse.y > view.getChooseLocationsY()[k] && mouse.y < (view.getChooseLocationsY()[k]+view.getChooseSizeY())){
+					console.log("I am clicking:" + k);
+				
+					//ideally each players sends their choice to the server
+					//idk how to do that on an individual basis yet so juan what the fuck
+					request4.onreadystatechange = function () {
+					var DONE = this.DONE || 4;
+					//if (this.readyState === DONE){
+					if (this.readyState === DONE && this.status==200){	
+						console.log(this);
+						console.log('Response:' +request4.response);
+						var resp = JSON.parse(request4.response);
+						console.log(resp.Player);	//this works
+						if(resp.Player != undefined){
+							view.displayResultsScreen(resp.Player);
+							//Okay now I should make the next screen show who got eliminated
+							//Results now it's own state, no need to alert server for data.
+							state = "ResultsState";
+							}
+						}
+					};
+				request4.open('POST', 'sicEm', true);
+				//request2.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+				request4.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+				//request2.send({"number": "4" });
+				
+				var vote = { 'player' : 4,'vote' : k};
+				//request2.send(i);
+				request4.send(JSON.stringify(vote));
+		}
+		}
 	}
-	
 	
 	
 	//////////////////////////////////////////////////////////////////////
@@ -241,6 +276,16 @@ function View(){
 		img.src = imageName;
 		img.onload = function(){
 			context.drawImage(img, picX,picY, picSizeX,picSizeY);
+			context.font = "20pt Arial";
+			context.fillText(displayText,textX,textY);
+		}
+		
+	}
+	this.displayImageAndText2 = function(imageName,displayText,picX,picY,picSizeX,picSizeY,textX,textY){
+		img2 = new Image();
+		img2.src = imageName;
+		img2.onload = function(){
+			context.drawImage(img2, picX,picY, picSizeX,picSizeY);
 			context.font = "20pt Arial";
 			context.fillText(displayText,textX,textY);
 		}
@@ -327,7 +372,7 @@ function View(){
 			if(inGameStatus[i] == false){
 				console.log("I get in here.");
 				//so it can't draw these two images at the same time? is it cause the onload thing?
-				//this.displayImageAndText(sources.eliminated,i,locX+(countTo3*sizeX),locY,sizeX,sizeY,locX+sizeX/2.2+(countTo3*sizeX),locY+sizeY/1.3);
+				this.displayImageAndText2(sources.eliminated,i,locX+(countTo3*sizeX),locY,sizeX,sizeY,locX+sizeX/2.2+(countTo3*sizeX),locY+sizeY/1.3);
 			}
 
 			
