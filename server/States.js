@@ -387,13 +387,16 @@ function SicState(container){
 	this.findPackLeaderAndReturnChoice = function(){
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
 			if(this.container.getPlayerRole(i) == "PackLeader"){
+				console.log('Found PL: ' + i);
 				return this.container.getPLChoice(i);
 			}
 		}
 	}
 	
 	this.packLeaderEliminates = function(){
-		this.container.eliminatePlayer(this.findPackLeaderAndReturnChoice());
+		var plChoice = this.findPackLeaderAndReturnChoice();
+		this.container.eliminatePlayer(plChoice);
+		this.container.setElimiantePost({Player: plChoice});
 		sicEm = true;
 	}
 	

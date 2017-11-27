@@ -105,12 +105,12 @@ app.post('/sicEm',function(req,res){
 			}
 		}
 	
-	
+	console.log('PL num:' + plNumber);
 	
 	testState.setPLChoice(plNumber,j.vote);
 	testState.changeState();
 	
-	var updatePost2 = {};
+	/*var updatePost2 = {};
 	updatePost2[0] = { state: 'ChooseState'};
 		
 		
@@ -121,10 +121,10 @@ app.post('/sicEm',function(req,res){
 			updatePost2[i+1] = play1;
 		}
 	
-	res.status(200);
+	res.status(200);*/
 	
 	//need to send who was eliminated right?
-	res.send(updatePost2);
+	res.send(testState.getEliminatePost());
 });
 //app.use('/client',express.static(_dirname+'/client'));
 app.use('/client',express.static(__dirname+'/client'));

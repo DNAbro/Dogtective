@@ -123,6 +123,40 @@ function Controller(view){
 		
 		//note need to grab the most recent update from server on who is eliminated.
 	}
+	if(state == "ResultsState2"){
+		//all this is a screen that displays the results.
+		//just click to continue to the next screen.
+		state = "ChooseState";
+		console.log("Moving to ChooseState.");
+		var request5 = new XMLHttpRequest();
+		request5.onreadystatechange = function () {
+					var DONE = this.DONE || 4;
+					//if (this.readyState === DONE){
+					if (this.readyState === DONE && this.status==200){	
+						console.log(this);
+						console.log('Response:' +request5.response);
+						var resp2 = JSON.parse(request5.response);
+						//console.log(resp2.Player);	//this works
+						var count = Object.keys(resp2).length-1;
+						console.log(count);
+						//need to send array of ingame or out.
+						var inOrOut3 = {};
+						for(var i = 0; i < count; i++){
+							inOrOut3[i] = resp2[i+1].inGame;
+							console.log(inOrOut3[i]);
+						}
+					
+					
+					view.displayChoosingScreen(count,inOrOut3);
+					
+					}
+				};
+				
+				request5.open('POST', 'results', true);
+				request5.send();
+		
+		//note need to grab the most recent update from server on who is eliminated.
+	}
 	////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////
 	//choosing
@@ -160,7 +194,7 @@ function Controller(view){
 				request2.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 				//request2.send({"number": "4" });
 				
-				var vote = { 'player' : 4,'vote' : i};
+				var vote = { 'player' : 1,'vote' : i};
 				//request2.send(i);
 				request2.send(JSON.stringify(vote));
 				
