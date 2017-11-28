@@ -17,6 +17,10 @@ exports.BaseState = function() {
 		playerArray[playerNum].setChoice(voteNum);
 	}
 	
+	this.resetVote = function(playerNum){
+		playerArray[playerNum].resetChoices();
+	}
+	
 	
 	//eliminates player from game
 
@@ -395,6 +399,7 @@ function SicState(container){
 	
 	this.packLeaderEliminates = function(){
 		var plChoice = this.findPackLeaderAndReturnChoice();
+		console.log("This is the player number who the PL chose: " + i);
 		this.container.eliminatePlayer(plChoice);
 		this.container.setElimiantePost({Player: plChoice});
 		sicEm = true;
@@ -413,7 +418,17 @@ function SicState(container){
 			}
 			else{
 				console.log("Sic to Choose");
-				//I should probably have a results state.
+				
+				for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
+					this.container.resetVote(i);
+					var temp = {}
+					//this.container.setPlayerPost(temp);
+					//this.container.setElimiantePost(temp);
+					//TODO CLEAR OUT THE ELIMINATEPOST
+					sicEm = false;
+				}
+				
+				
 				return new ChooseState(self.container);
 			}
 		

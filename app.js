@@ -45,6 +45,7 @@ app.post('/startPressed',function(req,res){
 	//testState.changeState();
 	testState.changeState();
 	
+	//fix this so PlayerPost is called correctly and doesn't send old info.
 	res.send(testState.getPlayerPost());
 	
 	
@@ -125,6 +126,8 @@ app.post('/sicEm',function(req,res){
 	
 	//need to send who was eliminated right?
 	res.send(testState.getEliminatePost());
+	var temp = {};
+	testState.setElimiantePost(temp);
 });
 //app.use('/client',express.static(_dirname+'/client'));
 app.use('/client',express.static(__dirname+'/client'));

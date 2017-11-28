@@ -4,7 +4,11 @@ Player = function(number) {
 	var playerRole;
 	var playerIsCurrentlyInGame = true;		//not eliminated.
 	
-	
+	this.resetChoices = function(){
+		playerRole.resetMyChoice(playerIsCurrentlyInGame);
+		//resetMyChoice turns choice was Made into true for those who are out or can't vote
+		//it also sets the votes of those who are out to -1
+	}
 	
 	
 	this.eliminatePlayer = function(){
@@ -43,7 +47,7 @@ Player = function(number) {
 	}
 	
 	this.setPLChoice = function(num){
-		return playerRole.setPackLeaderChoice();
+		playerRole.setPackLeaderChoice(num);
 	}
 	this.getRoleName = function() {
 		console.log(playerRole.getRole());
@@ -96,8 +100,21 @@ function DogtectiveRole(){
 	this.getRole = function(){
 		return roleText;
 	}
+	
+	
 	var choiceNum;			//an int of what the dogtective has chosen.
 	var choiceMade = false;
+	
+	this.resetMyChoice = function(inGame){
+		if(inGame){
+			choiceMade = false;
+		}
+		else{
+			choiceMade = true;
+			setChoiceNum = -1;
+		}
+	}
+	
 	this.setChoiceMade = function(bool){
 		choiceMade = bool;
 	}
@@ -126,6 +143,17 @@ function PugtectorRole(){
 	}
 	var choiceNum;			//an int of what the dogtective has chosen.
 	var choiceMade = false;
+	
+	this.resetMyChoice = function(inGame){
+		if(inGame){
+			choiceMade = false;
+		}
+		else{
+			choiceMade = true;
+			setChoiceNum = -1;
+		}
+	}
+	
 	this.setChoiceMade = function(bool){
 		choiceMade = bool;
 	}
@@ -154,6 +182,17 @@ function WatchhoundRole(){
 	}
 	var choiceNum;			//an int of what the dogtective has chosen.
 	var choiceMade = false;
+	
+	this.resetMyChoice = function(inGame){
+		if(inGame){
+			choiceMade = false;
+		}
+		else{
+			choiceMade = true;
+			setChoiceNum = -1;
+		}
+	}
+	
 	this.setChoiceMade = function(bool){
 		choiceMade = bool;
 	}
@@ -183,7 +222,15 @@ function PackLeaderRole(){
 	var choiceNum;			//Player number of the one packLeader chooses in
 	var choiceMade = true;
 	
-	var packLeaderChoice = false;
+	var packLeaderChoice = -1;
+	var packLeaderChoiceMade = false
+	
+	this.resetMyChoice = function(inGame){
+		if(inGame){
+			packLeaderChoiceMade = false;
+		}
+		
+	}
 	
 	this.setChoiceMade = function(bool){
 		choiceMade = bool;
@@ -201,8 +248,8 @@ function PackLeaderRole(){
 		console.log(displayText);
 	}
 	
-	this.setPackLeaderChoice = function(bool){
-		packLeaderChoice = bool;
+	this.setPackLeaderChoice = function(num){
+		packLeaderChoice = num;
 	}
 	this.getPackLeaderChoice = function(){
 		return packLeaderChoice;
@@ -222,6 +269,10 @@ function PackMemberRole(){
 	//unused
 	var choiceNum;			
 	var choiceMade = true;
+	
+	this.resetMyChoice = function(inGame){
+		
+	}
 	
 	this.setChoiceMade = function(bool){
 		choiceMade = bool;

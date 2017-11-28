@@ -92,7 +92,7 @@ function Controller(view){
 	if(state == "ResultsState"){
 		//all this is a screen that displays the results.
 		//just click to continue to the next screen.
-		state = "SicState";
+		
 		console.log("Moving to SicState.");
 		var request3 = new XMLHttpRequest();
 		request3.onreadystatechange = function () {
@@ -114,7 +114,7 @@ function Controller(view){
 					
 					
 					view.displayChoosingScreen(count,inOrOut3);
-					
+					state = "SicState";
 					}
 				};
 				
@@ -126,7 +126,7 @@ function Controller(view){
 	if(state == "ResultsState2"){
 		//all this is a screen that displays the results.
 		//just click to continue to the next screen.
-		state = "ChooseState";
+		
 		console.log("Moving to ChooseState.");
 		var request5 = new XMLHttpRequest();
 		request5.onreadystatechange = function () {
@@ -146,7 +146,7 @@ function Controller(view){
 							console.log(inOrOut3[i]);
 						}
 					
-					
+					state = "ChooseState";
 					view.displayChoosingScreen(count,inOrOut3);
 					
 					}
@@ -194,7 +194,7 @@ function Controller(view){
 				request2.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 				//request2.send({"number": "4" });
 				
-				var vote = { 'player' : 1,'vote' : i};
+				var vote = { 'player' : 5,'vote' : i};
 				//request2.send(i);
 				request2.send(JSON.stringify(vote));
 				
@@ -234,7 +234,7 @@ function Controller(view){
 							view.displayResultsScreen(resp.Player);
 							//Okay now I should make the next screen show who got eliminated
 							//Results now it's own state, no need to alert server for data.
-							state = "ResultsState";
+							state = "ResultsState2";
 							}
 						}
 					};
