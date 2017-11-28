@@ -46,6 +46,12 @@ app.post('/startPressed',function(req,res){
 	testState.changeState();
 	
 	//fix this so PlayerPost is called correctly and doesn't send old info.
+	for(i = 0; i <= testState.getPlayerArrayLength()-1; i++){
+			//console.log('Adding to Post:' + this.container.getPlayerFromArray(i).getPlayerRoleName());
+			var play1 = { playerNumber: testState.getPlayerFromArray(i).getPlayerNumber(), playerRole: testState.getPlayerFromArray(i).getRoleName(), inGame: testState.getPlayerFromArray(i).getPlayerIsInGame()}; 
+		
+			testState.getPlayerPost()[i+1] = play1;
+		}
 	res.send(testState.getPlayerPost());
 	
 	
