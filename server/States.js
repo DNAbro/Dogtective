@@ -10,6 +10,7 @@ exports.BaseState = function() {
 	var startWasPressed = false;
 	var playerPOST = {};
 	var playerEliminatedPOST = {};
+	var winnerPOST = {};
 	
 	
 	//assign vote
@@ -72,6 +73,9 @@ exports.BaseState = function() {
 	this.getPLChoice = function(num){
 		return playerArray[num].getPackLeaderChoice();
 	}
+	this.setWinnerPost = function(win) {
+		winnerPOST = win;
+	}
 	
 	this.setPLChoice = function(playerNum,num){
 		playerArray[playerNum].setPLChoice(num);
@@ -89,6 +93,9 @@ exports.BaseState = function() {
 	}
 	this.getDogtectiveCount = function() {
 		return dogtectiveCount;
+	}
+	this.getPackCount = function() {
+		return packCount;
 	}
 	
 	this.getPlayerArrayLength = function() {
@@ -264,7 +271,7 @@ function ChooseState(container){
 		}
 		else{
 			for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
-			if(this.container.getPlayerRole(i) == "Dogtective"){
+			if(this.container.getPlayerRole(i) == "Dogtective" && this.container.getPlayerFromArray(i).getPlayerIsInGame()){
 				return this.container.getPlayerChoice(i);
 				}
 			}
@@ -273,8 +280,11 @@ function ChooseState(container){
 	//finds the pugtector
 	this.findPugtectorAndReturnChoice = function(){
 		for(i = 0; i <= this.container.getPlayerArrayLength()-1; i++){
-			if(this.container.getPlayerRole(i) == "Pugtector"){
+			if(this.container.getPlayerRole(i) == "Pugtector" && this.container.getPlayerFromArray(i).getPlayerIsInGame()){
 				return this.container.getPlayerChoice(i);
+			}
+			else{
+				return -100;	//if the choice has been eliminated.
 			}
 		}
 	}
@@ -298,7 +308,8 @@ function ChooseState(container){
 			//alert that the Pugtector blocked!
 			console.log("Pugtector blocked the Dogtective!");
 			
-			this.container.setElimiantePost({Player: pug});
+			this.container.setElimiantePost({Player: -100});
+			//in client, need to check what this means. if it happens say Pugtector blocked.
 			eliminationAlreadyHappened = true;
 		}
 		else{
@@ -412,8 +423,16 @@ function SicState(container){
 		this.packLeaderEliminates();
 		
 		if(sicEm){
-			if(this.container.getDogtectiveCount() >= this.container.returnNumberOfPlayers() || this.container.getDogtectiveCount() == 0){
+			if(this.container.getDogtectiveCount() >= this.container.getPackCount() || this.container.getDogtectiveCount() == 0){
 				console.log("Sic to End");
+				var win;
+				if(this.container.getDogtectiveCount() >= this.container.getPackCount()){
+					win = { Winner: 0};
+				}
+				else{
+					win = { Winner: 1};
+				}
+				this.container.setWinnerPost(win);
 				return new EndState(self.container);
 			}
 			else{
