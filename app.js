@@ -1,9 +1,16 @@
+"use strict";
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/
 
+const mdsm = require('./mdsm');
+
+mdsm.init({
+	mode: 'Middleware',
+});
 
 var state = require("./server/States.js");
 //require("./client/Index.js");
@@ -13,7 +20,9 @@ var serv = require('http').Server(app);
 var testState = new state.BaseState();
 testState.changeState();
 //__dirname = path.resolve(path.dirname(''));
-app.get('/',function(req, res) {
+app.get('/',function(req,res){
+	
+
 	
 	
 	if(testState.returnNumberOfPlayers() < 15 && testState.getValue() == "StartState"){
@@ -34,7 +43,17 @@ app.get('/',function(req, res) {
 	
 });
 
-//app.get('/bish',function(req, res){
+app.get('/login', function(req,res){
+	mdsm.processRequest(req, res,
+		function(error){
+		
+		}
+	);
+});
+
+
+
+
 app.post('/startPressed',function(req,res){
 	console.log(req.body);
 	res.status(200);
@@ -46,7 +65,7 @@ app.post('/startPressed',function(req,res){
 	testState.changeState();
 	
 	//fix this so PlayerPost is called correctly and doesn't send old info.
-	for(i = 0; i <= testState.getPlayerArrayLength()-1; i++){
+	for(var i = 0; i <= testState.getPlayerArrayLength()-1; i++){
 			//console.log('Adding to Post:' + this.container.getPlayerFromArray(i).getPlayerRoleName());
 			var play1 = { playerNumber: testState.getPlayerFromArray(i).getPlayerNumber(), playerRole: testState.getPlayerFromArray(i).getRoleName(), inGame: testState.getPlayerFromArray(i).getPlayerIsInGame()}; 
 		
