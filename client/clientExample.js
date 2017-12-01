@@ -181,20 +181,31 @@ function Controller(view){
 						console.log('Response:' +request2.response);
 						var resp = JSON.parse(request2.response);
 						console.log(resp.Player);	//this works
+						if(resp.Winner != undefined){
+							view.displayEndingScreen(resp.Winner);
+							state = "EndingState";
+						}
 						if(resp.Player != undefined){
-							view.displayResultsScreen(resp.Player);
+							
+							if(resp.Player == -100){
+								view.displayPugBlock();
+							}
+							else{
+								view.displayResultsScreen(resp.Player);
+							}
 							//Okay now I should make the next screen show who got eliminated
 							//Results now it's own state, no need to alert server for data.
 							state = "ResultsState";
 							}
 						}
+						
 					};
 				request2.open('POST', 'voteWasMade', true);
 				//request2.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 				request2.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 				//request2.send({"number": "4" });
 				
-				var vote = { 'player' : 5,'vote' : i};
+				var vote = { 'player' : 0,'vote' : i};
 				//request2.send(i);
 				request2.send(JSON.stringify(vote));
 				
@@ -230,6 +241,10 @@ function Controller(view){
 						console.log('Response:' +request4.response);
 						var resp = JSON.parse(request4.response);
 						console.log(resp.Player);	//this works
+						if(resp.Winner != undefined){
+							view.displayEndingScreen(resp.Winner);
+							state = "EndingState";
+						}
 						if(resp.Player != undefined){
 							view.displayResultsScreen(resp.Player);
 							//Okay now I should make the next screen show who got eliminated
@@ -248,6 +263,10 @@ function Controller(view){
 				request4.send(JSON.stringify(vote));
 		}
 		}
+	}
+	
+	if(state == "EndState"){
+		
 	}
 	
 	
@@ -430,6 +449,31 @@ function View(){
 		}
 		
 		
+	}
+	
+	///////////////////////////////////////////////////////////
+	this.displayEndingScreen = function(winner){
+		var tex;
+		if(winner == 0){
+			tex = "The Dogtectives have jailed enough players. They win!";
+			
+		}
+		else{
+			
+			tex = "The Pack have sniffed out the Dogtectives! They win!";
+		}
+		
+		context.clearRect(0, 0, canvas.width, canvas.height);	//clears canvas first.
+		context.fillText(tex, startX, startY);
+		
+		//note I can just create a state here, it doesn't have to go to the server.
+	}
+	
+	this.displayPugBlock = function(){
+		
+		context.clearRect(0, 0, canvas.width, canvas.height);	//clears canvas first.
+		var tex = "Pugtector protects! Nobody jailed.";
+		context.fillText(tex, startX, startY);
 	}
 	
 	

@@ -76,7 +76,15 @@ app.post('/voteWasMade',function(req,res){
 	res.status(200);
 	
 	testState.changeState();
-	res.send(testState.getEliminatePost());
+	if(testState.getWinner()){
+		console.log("Sending winner post.");
+		console.log(testState.getWinnerPost());
+		res.send(testState.getWinnerPost());
+	}
+	else{
+		console.log("Sending eliminate");
+		res.send(testState.getEliminatePost());
+	}
 });
 
 app.post('/results',function(req,res){
@@ -117,21 +125,13 @@ app.post('/sicEm',function(req,res){
 	testState.setPLChoice(plNumber,j.vote);
 	testState.changeState();
 	
-	/*var updatePost2 = {};
-	updatePost2[0] = { state: 'ChooseState'};
-		
-		
-		for(i = 0; i <= testState.getPlayerArrayLength()-1; i++){
-			//console.log('Adding to Post:' + this.container.getPlayerFromArray(i).getPlayerRoleName());
-			var play1 = { playerNumber: testState.getPlayerFromArray(i).getPlayerNumber(), playerRole: testState.getPlayerFromArray(i).getRoleName(), inGame: testState.getPlayerFromArray(i).getPlayerIsInGame()}; 
-		
-			updatePost2[i+1] = play1;
-		}
+	if(testState.getWinner()){
+		res.send(testState.getWinnerPost());
+	}
+	else{
+		res.send(testState.getEliminatePost());
+	}
 	
-	res.status(200);*/
-	
-	//need to send who was eliminated right?
-	res.send(testState.getEliminatePost());
 	var temp = {};
 	testState.setElimiantePost(temp);
 });

@@ -11,6 +11,7 @@ exports.BaseState = function() {
 	var playerPOST = {};
 	var playerEliminatedPOST = {};
 	var winnerPOST = {};
+	var winnerHappened = false;
 	
 	
 	//assign vote
@@ -76,6 +77,9 @@ exports.BaseState = function() {
 	this.setWinnerPost = function(win) {
 		winnerPOST = win;
 	}
+	this.getWinnerPost = function(){
+		return winnerPOST;
+	}
 	
 	this.setPLChoice = function(playerNum,num){
 		playerArray[playerNum].setPLChoice(num);
@@ -84,6 +88,12 @@ exports.BaseState = function() {
 	//returns playerRole, gets one specified in array, NOT playerNumber.
 	this.getPlayerRole = function(num){
 		return playerArray[num].getRoleName();
+	}
+	this.setWinner = function(bool){
+		winnerHappened = bool;
+	}
+	this.getWinner = function(){
+		return winnerHappened;
 	}
 	
 	//returns the current number of players.
@@ -427,12 +437,13 @@ function SicState(container){
 				console.log("Sic to End");
 				var win;
 				if(this.container.getDogtectiveCount() >= this.container.getPackCount()){
-					win = { Winner: 0};
+					win = { Winner: 0};	//dogtective win
 				}
 				else{
-					win = { Winner: 1};
+					win = { Winner: 1}; //pack win.
 				}
 				this.container.setWinnerPost(win);
+				this.container.setWinner(true);
 				return new EndState(self.container);
 			}
 			else{
