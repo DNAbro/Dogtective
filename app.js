@@ -8,9 +8,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/
 
 const mdsm = require('./mdsm');
 
-mdsm.init({
-	mode: 'Middleware',
-});
+
 
 var state = require("./server/States.js");
 //require("./client/Index.js");
@@ -19,27 +17,77 @@ var serv = require('http').Server(app);
 
 var testState = new state.BaseState();
 testState.changeState();
+
+mdsm.init({
+	mode: 'Middleware',
+	endpoints: [
+		{
+			url: '/',
+			allowedClassTypes: ['screen'],
+			handler: function(sessionData,clientData,request,response,mdsmCookie){
+				console.log('Handling doSomething1');
+			}
+		},
+		{
+			url: '/api/doSomething2/',
+			allowedClassTypes: ['screen'],
+			handler: function(sessionData,clientData,request,response,mdsmCookie){
+				console.log('Handling doSomething2');
+			}
+		},
+	],
+});
 //__dirname = path.resolve(path.dirname(''));
 app.get('/',function(req,res){
 	
-
+	mdsm.processRequest(req, res,
+		function(error){
+			console.log("Code is: " + error.errorCode);
+			if(error.errorCode === 0){
+				let newSessionInfo = {
+					sessionID: null,		// Don't specify. Let createSession() generate it.
+					timeToLive: 10000,	// 10 second session length
+				};
+				let newSesh = mdsm.createSession(newSessionInfo);
+				let clientCookie = mdsm.addClient({
+					session: newSesh,
+					clientClass: 'screen',
+					clientData: {'foo':'bar'},
+				});
+				res.setHeader('Set-Cookie',['mdsm=' + clientCookie]);
+				//res.end('Blah blah');
+				
+				
+				console.log(newSessionInfo.sessionID);
+				if(testState.returnNumberOfPlayers() < 15 && testState.getValue() == "StartState"){
+					testState.createPlayer();
+				}
+				else{
+					console.log("There are already 15 players.");
+					//testState.changeState();
+				}
+				res.sendFile(__dirname + '/client/index.html');
+			}
+		}
+	);
 	
-	
-	if(testState.returnNumberOfPlayers() < 15 && testState.getValue() == "StartState"){
+	/*if(testState.returnNumberOfPlayers() < 15 && testState.getValue() == "StartState"){
 		testState.createPlayer();
 	}
 	else{
 		console.log("There are already 15 players.");
 		//testState.changeState();
-	}
+	}*/
 	
    
    
    
    
-	res.sendFile(__dirname + '/client/index.html');
+	//res.sendFile(__dirname + '/client/index.html');
 	//res.sendFile(__dirname + '/client/index.js');
 	//res.sendFile(__dirname + '/client/clientExample.js');
+		
+	
 	
 });
 

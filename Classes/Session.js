@@ -1,27 +1,21 @@
-"use strict";
 const crypto = require('crypto');
 const Client = require("./Client.js");
 
 class Session{
 	constructor(newSessionInfo){
-		/* Set the session ID */
 		this.sessionID = newSessionInfo.sessionID;
 		this.expiryDate = newSessionInfo.expiryDate;
 		this.clientList = [];
+		this.validEndpoints = newSessionInfo.validEndpoints;
 		this.sessionData = newSessionInfo.sessionData;
-
-		/* Create a unique session secret for crypto services */
-		this.sessionSecret = crypto.randomFillSync(Buffer.alloc(32), 0, 32).toString('base64');
 	}
 
-	/* Add a client */
+	/* Add a client to the clientList */
 	addClient(newClientData){
-		// let newClient = new Client(crypto.randomFillSync(Buffer.alloc(32), 0, 32).toString('hex'));
 		let newClient = new Client({
 			clientID: crypto.randomFillSync(Buffer.alloc(32), 0, 32).toString('hex'),
-			clientClass: newClientData.newClientClass,
+			clientClass: newClientData.clientClass,
 			clientData: newClientData.clientData,
-			parentSession: this
 		});
 
 		this.clientList.push(newClient);
@@ -52,12 +46,14 @@ class Session{
 			return c.clientID === JSON.parse(mdsmCookie).clientID;
 		})[0];
 
-		console.log(client);
-		/* TODO:
-				* Get the endpoint from req
-				* Determine whether the client has privileges for that endpoint based on its class
-				* If it does, run the callback for that endpoint, passing in the client data and session data
-		*/
+		let endpoint = this.validEndpoints.filter((ep)=>{
+			return ep.url === this.trimURL(req.url);
+		})[0];
+
+		if(endpoint.allowedClassTypes.includes(client.clientClass)){
+			endpoint.handler(this.sessionData,client.clientData,req,res,mdsmCookie);
+		}
+
 		res.end(`Your session is ${this.sessionID}. Your MDSM cookie is ${mdsmCookie}`);
 	}
 
@@ -70,16 +66,12 @@ class Session{
 
 	/* Destroys the current session, but only if the expiry date is in the past. */
 	attemptSelfDestruct(){
-		// console.log('Attempting to delete session [' + this.sessionID + ']');
-		// console.log('Its expiry date is ' + (this.expiryDate) + ' and the current time is ' + (Date.now()));
 		/* Get the difference in ms between expiry date and the current time */
 		let true_ttl = this.expiryDate - Date.now();
-		// console.log(`true_ttl: ${true_ttl}`);
 
 		/* If the ttl is not positive (meaning the expiry date is smaller than the
 		 * current date), delete the session. */
 		if(true_ttl <= 0){
-			// console.log('Deleting session ' + this.sessionID);
 			delete this;	// Delete the Session object
 			return true;	// Signal that the deletion was successful
 		}
@@ -88,18 +80,16 @@ class Session{
 		else return false;
 	}
 
-	encrypt(data){
-		this.cipher = crypto.createCipher('aes256', this.sessionSecret);
-		let encrypted = this.cipher.update(data, 'utf8', 'hex');
-		encrypted += this.cipher.final('hex');
-		return encrypted;
-	}
-
-	decrypt(encryptedData){
-		this.decipher = crypto.createDecipher('aes256', this.sessionSecret);
-		let decrypted = this.decipher.update(encryptedData, 'hex', 'utf8');
-		decrypted = this.decipher.final('utf8');
-		return decrypted;
+	/* If the URL starts or begins with slashes, trims it to remove them. */
+	trimURL(url){
+		let trimmedUrl = url;
+		if(trimmedUrl.charAt(0) === '/'){
+			trimmedUrl = trimmedUrl.substring(1,trimmedUrl.length);
+		}
+		if(trimmedUrl.charAt(trimmedUrl.length - 1) === '/'){
+			trimmedUrl = trimmedUrl.substring(0,trimmedUrl.length - 1);
+		}
+		return trimmedUrl;
 	}
 }
 
