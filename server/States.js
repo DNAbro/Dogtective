@@ -65,6 +65,12 @@ exports.BaseState = function() {
 	this.getChoiceWasMadeBool = function(num){
 		return playerArray[num].getChoiceMade();
 	}
+	this.getCookie = function(num){
+		return playerArray[num].getCookieID();
+	}
+	this.setCookie = function(num,cook){
+		playerArray[num].setCookieID(cook);
+	}
 	
 	this.getPlayerChoice = function(num) {
 		return playerArray[num].getChoice();

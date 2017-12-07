@@ -16,6 +16,7 @@ var state = require("./server/States.js");
 var serv = require('http').Server(app);
 
 var testState = new state.BaseState();
+var count = 0;
 testState.changeState();
 
 mdsm.init({
@@ -26,13 +27,49 @@ mdsm.init({
 			allowedClassTypes: ['screen'],
 			handler: function(sessionData,clientData,request,response,mdsmCookie){
 				console.log('Handling doSomething1');
+				console.log(sessionData);
+				console.log(clientData);
 			}
 		},
 		{
-			url: '/api/doSomething2/',
+			url: '/login/',
 			allowedClassTypes: ['screen'],
 			handler: function(sessionData,clientData,request,response,mdsmCookie){
-				console.log('Handling doSomething2');
+				let clientCookie = mdsm.addClient({
+					session: '420',
+					clientClass: 'screen',
+					clientData: {'Player': count},
+				});
+				
+				testState.createPlayer();
+				testState.setCookie(count, clientCookie);
+				count++;
+				
+				
+			}
+		},
+		{
+		url: '/startPressed',
+			allowedClassTypes: ['screen'],
+			handler: function(sessionData,clientData,request,response,mdsmCookie){
+				console.log("Please work:");
+				console.log(clientData);
+			}
+		},
+		{
+		url: '/voteWasMade',
+			allowedClassTypes: ['screen'],
+			handler: function(sessionData,clientData,request,response,mdsmCookie){
+				console.log("Please work:");
+				console.log(clientData);
+				console.log("Player is :" + clientData.Player);
+				
+				var j = JSON.parse(Object.keys(request.body)[0]);
+				//console.log(Object.keys(req.body)[0]);
+				//console.log(j.player)
+				console.log("Vote is:" + j.vote);
+				testState.assignVote(clientData.Player,j.vote);
+				//makeVote
 			}
 		},
 	],
@@ -45,32 +82,44 @@ app.get('/',function(req,res){
 			console.log("Code is: " + error.errorCode);
 			if(error.errorCode === 0){
 				let newSessionInfo = {
-					sessionID: null,		// Don't specify. Let createSession() generate it.
-					timeToLive: 10000,	// 10 second session length
+					sessionID: '420',		// Don't specify. Let createSession() generate it.
+					timeToLive: 600000,	// 10 second session length
 				};
 				let newSesh = mdsm.createSession(newSessionInfo);
 				let clientCookie = mdsm.addClient({
 					session: newSesh,
 					clientClass: 'screen',
-					clientData: {'foo':'bar'},
+					clientData: {'Original':'please'},
 				});
 				res.setHeader('Set-Cookie',['mdsm=' + clientCookie]);
 				//res.end('Blah blah');
 				
 				
 				console.log(newSessionInfo.sessionID);
-				if(testState.returnNumberOfPlayers() < 15 && testState.getValue() == "StartState"){
+				/*if(testState.returnNumberOfPlayers() < 15 && testState.getValue() == "StartState"){
 					testState.createPlayer();
 				}
 				else{
 					console.log("There are already 15 players.");
 					//testState.changeState();
-				}
+				}*/
 				res.sendFile(__dirname + '/client/index.html');
 			}
+			else if(error.errorCode === 1){
+				console.log("go to login");
+				//cookie is not valid.
+				
+				res.setHeader('Set-Cookie',[
+					`mdsm=; HttpOnly; expires=Thu, 01 Jan 1970 00:00:00 GMT`,
+					// `data:59e112e318259d1e5797741c5448971bd108de1f1981a8c048abfedba67a3154=butt; HttpOnly; Max-Age=60`,
+					// `data:59e112e318259d1e5797741c5448971bd108de1f1981a8c048abfedba67a3154=butt; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`,
+					]);
+			}
+		
 		}
 	);
 	
+	//console.log("Lets see if this works:" +k);
 	/*if(testState.returnNumberOfPlayers() < 15 && testState.getValue() == "StartState"){
 		testState.createPlayer();
 	}
@@ -92,11 +141,54 @@ app.get('/',function(req,res){
 });
 
 app.get('/login', function(req,res){
-	mdsm.processRequest(req, res,
+	console.log("login page");
+	/*mdsm.processRequest(req, res,
 		function(error){
-		
+			console.log("Error in login is: " + error.errorCode);
+			if(error.errorCode === 0){
+				console.log('Session isnt valid');
+				let clientCookie = mdsm.addClient({
+					session: '420',
+					clientClass: 'screen',
+					clientData: {'Player': count},
+				});
+				count++;
+				testState.createPlayer();
+				res.sendFile(__dirname + '/client/index.html');
+			}
+			else if(error.errorCode === 1){
+				
+				let clientCookie = mdsm.addClient({
+					session: '420',
+					clientClass: 'screen',
+					clientData: {'Player': count},
+				});
+				
+				res.sendFile(__dirname + '/client/index.html');
+
+				
+				//let clientCookie = mdsm.addClient(420,
+					
+				
+			}
 		}
-	);
+	);*/
+	let clientCookie = mdsm.addClient({
+					session: '420',
+					clientClass: 'screen',
+					clientData: {'Player': count},
+				});
+				
+	testState.createPlayer();
+	testState.setCookie(count, clientCookie);
+	res.setHeader('Set-Cookie',['mdsm=' + clientCookie]);
+	count++;
+	
+	
+	
+	res.sendFile(__dirname + '/client/index.html');
+	res.status(200);
+
 });
 
 
@@ -122,6 +214,26 @@ app.post('/startPressed',function(req,res){
 	res.send(testState.getPlayerPost());
 	
 	
+	//console.log("3."+req.header.cookie);
+	
+	//
+	mdsm.processRequest(req, res,
+		function(error){
+			console.log("Error in login is: " + error.errorCode);
+			if(error.errorCode === 0){
+				
+			}
+			else if(error.errorCode === 1){
+
+				//let clientCookie = mdsm.addClient(420,
+					
+				
+			}
+		}
+	);
+	
+	
+	
 	//res.send(req.body);
 	//JSON.stringify(
 });
@@ -132,11 +244,26 @@ app.post('/voteWasMade',function(req,res){
 	
 	//this grabs the message, tbh there is probably a much better way to get this.
 	var j = JSON.parse(Object.keys(req.body)[0]);
-	console.log(Object.keys(req.body)[0]);
-	console.log(j.player)
-	console.log(j.vote);
+	//console.log(Object.keys(req.body)[0]);
+	//console.log(j.player)
+	//console.log(j.vote);
 	///
-	testState.assignVote(j.player,j.vote);
+	//testState.assignVote(j.player,j.vote);
+	
+	mdsm.processRequest(req, res,
+		function(error){
+			console.log("Error in login is: " + error.errorCode);
+			if(error.errorCode === 0){
+				
+			}
+			else if(error.errorCode === 1){
+
+				//let clientCookie = mdsm.addClient(420,
+					
+				
+			}
+		}
+	);
 	
 	//console.log(req);
 	console.log("Server response to voteWasMade");

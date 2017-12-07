@@ -3,6 +3,7 @@ Player = function(number) {
 	var playerNumber = number;
 	var playerRole;
 	var playerIsCurrentlyInGame = true;		//not eliminated.
+	var cookieID;
 	
 	this.resetChoices = function(){
 		playerRole.resetMyChoice(playerIsCurrentlyInGame);
@@ -24,6 +25,13 @@ Player = function(number) {
 		
 		console.log("I am player number:"+ playerNumber);
 		
+	}
+	
+	this.getCookieID = function(){
+		return cookieID;
+	}
+	this.setCookieID = function(cook){
+		cookieID = cook;
 	}
 	
 	this.getPlayerIsInGame = function() {

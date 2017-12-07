@@ -54,7 +54,7 @@ class Session{
 			endpoint.handler(this.sessionData,client.clientData,req,res,mdsmCookie);
 		}
 
-		res.end(`Your session is ${this.sessionID}. Your MDSM cookie is ${mdsmCookie}`);
+		//res.end(`Your session is ${this.sessionID}. Your MDSM cookie is ${mdsmCookie}`);
 	}
 
 	/* Extends the life of the current session by a specified number of milliseconds.
